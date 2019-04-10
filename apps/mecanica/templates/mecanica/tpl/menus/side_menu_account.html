@@ -1,0 +1,20 @@
+<ul class="nav">
+    <li class="margin-b-30">
+    	<a href="{% url 'activos:index' %}">
+    		<i class="fa fa-chevron-left fa-mini"></i> Volver
+    	</a>
+    </li>
+    <li class="margin-b-10">
+        <span class="color-3 title title-2">MI CUENTA</span>
+    </li>
+    <li>
+        <a ng-href="#/"  ng-class="{active:active_route=='/'}">
+            Detalles generales
+        </a>
+    </li>
+    <li>
+    	<a ng-href="/app/account/#profile" ng-class="{active:active_route=='/profile'}">
+    		Editar Perfil
+    	</a>
+    </li>
+</ul>

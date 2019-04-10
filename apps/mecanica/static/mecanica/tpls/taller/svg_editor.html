@@ -1,0 +1,46 @@
+<div resize id="editor-container" endless-scroll class="tool-[[activeBtn]] mode-[[editor_mode]]" style="width: [[windowWidth]]px; height: [[windowHeight]]px;">
+	<span class="saving-board" ng-class="{showing:saving_board}">
+		<span class="saving-icon"><i class="fa fa-spin fa-spinner"></i></span>
+		Salvando
+	</span>
+	<div id="board-editor-zone" style="background-size: [[scale*200]]px; background-position: [[transformX]]px [[transformY]]px;">
+		<svg id="main-svg-container" width="[[windowWidth]]" height="[[windowHeight]]">
+			<g id="nodes-wrapper" class="outline">
+				<g class="board-object" fid="[[figure.id]]" ng-repeat="figure in layout.elementos" on-finish-render>
+					<svg-rect ng-if="figure.type=='rect'" figure="figure"></svg-rect>
+					<svg-circle ng-if="figure.type=='circle'" figure="figure"></svg-circle>
+					<svg-rect ng-if="figure.type=='rect' || figure.type=='square'" figure="figure"></svg-rect>
+					<svg-poly ng-if="figure.type=='star' || figure.type=='triangle' || figure.type=='rombo'" figure="figure"></svg-poly>
+					<svg-text ng-if="figure.type=='text'" figure="figure"></svg-text>
+				</g>
+			</g>
+			<g id="brush-wrapper" style="pointer-events: all;">
+				<rect class="background" style="visibility: hidden; cursor: crosshair;" x="0" width="[[windowWidth]]" y="0" height="[[windowHeight]]"/>
+			</g>
+		</svg>
+
+		<div id="widgets-selection" ng-show="selections.length || _sel_wrapper" style="left: [[transformX]]px; top: [[transformY]]px; font-size: [[scale*100]]px;">
+			<div class="selection-wrapper" ng-repeat="sel in selections">
+				<div s-handler-drag el="sel" class="selections-handler" ng-if="selections.length==1" style="left: [[sel.left(scalePx, scale)*scale-24+sel.getAttr('tx', 0)*scale]]px; top: [[sel.top(scalePx, scale)*scale-24+sel.getAttr('ty', 0)*scale]]px;"></div>
+				<div class="selection-item-wrapper" style="transform: rotate([[sel.getAttr('r', 0)]]deg); transform-origin: [[sel.left(scalePx,scale)*scale+sel.getAttr('width', '', scale)/2*scale+sel.getAttr('tx', 0)*scale]]px [[sel.top(scalePx,scale)*scale+sel.getAttr('height', '', scale)/2*scale+sel.getAttr('ty', 0)*scale]]px 0;">
+
+					<div>
+						<!-- para NO widgets -->
+						<div class="selections-item" style="left: [[sel.left(scalePx, scale)*scale-2+sel.getAttr('tx', 0)*scale]]px; top: [[sel.top(scalePx, scale)*scale-2+sel.getAttr('ty', 0)*scale]]px;">
+							<div class="selection-inner-bar top" style="width: [[sel.getAttr('width', '', scale)*scale+4]]px;"></div>
+						</div>
+						<div class="selections-item" style="left: [[(sel.left(scalePx, scale)+sel.getAttr('width', '', scale))*scale+sel.getAttr('tx', 0)*scale]]px; top: [[sel.top(scalePx, scale)*scale-2+sel.getAttr('ty', 0)*scale]]px;">
+							<div class="selection-inner-bar right" style="height: [[sel.getAttr('height', '', scale)*scale+2]]px;"></div>
+						</div>
+						<div class="selections-item" style="left: [[sel.left(scalePx, scale)*scale-2+sel.getAttr('tx', 0)*scale]]px; top: [[(sel.top(scalePx, scale)+sel.getAttr('height', '', scale))*scale+sel.getAttr('ty', 0)*scale]]px;">
+							<div class="selection-inner-bar bottom" style="width: [[sel.getAttr('width', '', scale)*scale+4]]px;"></div>
+						</div>
+						<div class="selections-item" style="left: [[sel.left(scalePx, scale)*scale-2+sel.getAttr('tx', 0)*scale]]px; top: [[sel.top(scalePx, scale)*scale+sel.getAttr('ty', 0)*scale]]px;">
+							<div class="selection-inner-bar left" style="height: [[sel.getAttr('height', '', scale)*scale]]px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

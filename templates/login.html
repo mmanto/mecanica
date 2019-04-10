@@ -1,0 +1,59 @@
+{% extends "base_app.html"%}
+{% block title %} Login {% endblock %}
+{% load staticfiles %}
+
+{% block body %}
+
+    <div class="wrapper-page">
+
+        <div class="text-center">
+            <h4 class="m-t-0 content-title"><b>Sistema Metal Mecánica</b></h4>
+            <p class="text-muted font-13 m-b-0">
+                Ingresa tu usuario y clave de acceso para comenzar
+            </p>
+        </div>
+        {% if message %}
+            <div class="alert alert-danger">{{message}}</div>
+        {% endif %}
+        <form class="form-horizontal m-t-20" autocomplete="off" method="POST" id="form-login">
+            {% csrf_token %}
+
+            <div class="form-group row">
+                <div class="col-12">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="mdi mdi-account"></i></span>
+                        {{ form.username }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-12">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="mdi mdi-lock"></i></span>
+                        {{ form.password }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-7" style="padding-top: 7px;">
+                    <div class="checkbox-primary">
+                        <label for="checkbox-signup">
+                            <input type="checkbox" id="checkbox-signup_me" name="_remember_me" checked /> Recordarme aquí
+                        </label>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <button class="btn btn-primary btn-custom w-md waves-effect waves-light pull-right" type="submit">Ingresar</button>
+                </div>
+            </div>
+
+            <div class="form-group row m-t-30">
+                <div class="col-sm-7">
+                    <a href="pages-recoverpw.html" class="text-muted"><i class="fa fa-lock m-r-5"></i> Olvidó su contraseña?</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

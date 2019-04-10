@@ -1,0 +1,60 @@
+<div id="main-wraper">
+    <div class=" page-title-box">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="">
+                    <h4 class="m-t-0 content-title"><b>Layouts</b></h4>
+                    <p class="text-muted font-13 m-b-0">
+                        Listado de todos los layouts registrados en el sistema
+                    </p>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <input type="search" class="form-control form-control-sm" placeholder="Buscar layout..." aria-controls="datatable-buttons" ng-model="filter_search">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-6 card-block-wrapper">
+            <a href="" data-toggle="modal" data-target="#modal-form-layout">
+            <div class="card block new">
+                <div class="card-img">
+                    <i class="fa fa-plus"></i>
+                </div>
+                <div class="card-block"></div>
+            </div>
+            </a>
+        </div>
+        <div ng-repeat="layout in layouts.results | filter:filter_search as tallerResult" ng-show="!layout.deleting" class="col-lg-4 col-md-4 col-sm-6 card-block-wrapper">
+            <div class="card block">
+                <div class="card-block">
+                    <ul class="list-inline font-14">
+                        <li>Modificación por <b>[[layout.usuario_modificacion.perfil.nombre]]</b> el [[layout.fecha_modificacion|date:"mediumDate"]]</li>
+                        <li>Creado por: <b>[[layout.usuario.perfil.nombre]]</b></li>
+                        <li>[[layout.descripcion | truncate:100]]</li>
+                    </ul>
+                    <div class="card-title">
+                        <div class="truncate"><a ng-href="/app/#/layout/[[layout.id]]" ng-bind="layout.nombre"></a></div>
+                        <div class="card-buttons">
+                            <a class="btn btn-sm" href="" data-toggle="modal" data-target="#modal-form-layout[[layout.id]]" tooltip="Editar información" data-placement="top"><i class="fa fa-edit"></i></a>
+                            <a class="btn btn-sm" ng-href="/app/#/layout/[[layout.id]]" tooltip="Editar Elementos" data-placement="top"><i class="mdi mdi-drawing"></i></a>
+                            <a class="btn btn-sm pull-right" data-toggle="modal" data-target="#modal-delete-layout[[layout.id]]" tooltip="Eliminar Layout" data-placement="top"><i class="fa fa-trash-o"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-include src="'/static/mecanica/tpls/taller/modals/delete.html'"></ng-include>
+            <ng-include src="'/static/mecanica/tpls/taller/modals/form.html'"></ng-include>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <paginator ng-if="layouts.results.length" route="/app/api/taller" ng-model="layouts"></paginator>
+        </div>
+    </div>
+</div>
+<ng-include src="'/static/mecanica/tpls/taller/modals/form.html'"></ng-include>

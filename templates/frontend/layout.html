@@ -1,0 +1,37 @@
+<!doctype html>
+<html class="no-js" lang="es">
+    <head>
+        <title>Activos {% block title %} Inicio {% endblock %}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="description" content="{% block description %} {% endblock%}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% block metas %}{% endblock %}
+        {% load staticfiles %}
+        <link rel="icon" type="image/x-icon" href="{% block favicon %}{% static 'conceptboard/images/logo_icon_small.png' %}{% endblock %}" />
+        {% block stylesheets %}
+        <!-- CSS Stylesheets
+            ============================================= -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome/css/font-awesome.css' %}" />
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/frontend/main.style.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/frontend/themify-icons.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/frontend/style.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/frontend/magnific-popup.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/frontend/demo9.css' %}" />
+        {% endblock %}
+
+
+        <script src="{% static 'js/modernizr.js' %}"></script>
+
+    </head>
+
+
+    <!-- Main body tag content goes here
+        ============================================= -->
+    <body>
+
+       <h1>Pagina inicial</h1>
+       <a href="/app/login">Iniciar sesión</a>
+    </body>
+</html>

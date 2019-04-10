@@ -1,0 +1,30 @@
+<ul class="nav">
+    <li class="margin-b-30">
+    	<a href="{% url 'activos:index' %}">
+    		<i class="fa fa-chevron-left fa-mini"></i> Volver
+    	</a>
+    </li>
+    <li class="margin-b-10">
+        <span class="color-3 title title-2">USUARIOS</span>
+    </li>
+    <li>
+        <a href="" class="active" ng-click="users_filter=''">
+            Todos los usuarios (<span ng-bind="getTotalUsers()"></span>)
+        </a>
+    </li>
+    <li>
+        <a href="" ng-click="users_filter='I'">
+            Usuarios Internos (<span ng-bind="getInternalUsers()"></span>)
+        </a>
+    </li>
+    <li>
+    	<a href="" ng-click="users_filter='E'">
+    		Usuarios Externos (<span ng-bind="getExternalUsers()"></span>)
+    	</a>
+    </li>
+    <li>
+    	<a href="" ng-click="users_filter='O'">
+    		Invitaciones abiertas (<span ng-bind="getOpenInvitations()"></span>)
+    	</a>
+    </li>
+</ul>

@@ -1,0 +1,198 @@
+<div id="main-wraper">
+    <div class=" page-title-box">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="">
+                    <h4 class="m-t-0 content-title"><b>Gestión de Órdenes de Trabajo y Actividades</b></h4>
+                    <p class="text-muted font-13 m-b-0">
+                        Listado de todos las tarjetas kanban y sus actividades.
+                    </p>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <input type="search" class="form-control form-control-sm" placeholder="Buscar tarea..." aria-controls="datatable-buttons" ng-model="filter_search">
+            </div>
+        </div>
+    </div>
+    <div class="row m-b-20">
+        <div class="col-md-10">
+            <h4 class="m-t-0 header-title"><b>Órdenes de trabajo</b></h4>
+        </div>
+        <div class="col-md-2" style="text-align: right;">
+            <button class="btn btn-primary waves-effect waves-light btn-sm" data-toggle="modal" type="button" data-target="#modal-form-orden"><i class="mdi mdi-plus"></i> NUEVA</button>
+        </div>
+    </div>
+    <div class="panel panel-default" ng-repeat="orden in ordenes.results | filter:filter_search | orderBy:'orden' as proyResult">
+        <div class="panel-heading" style="cursor:pointer;background:#[[orden.estado.color]];">
+            <h3 class="panel-title truncate" style="color: white;" ng-click="selectOrden(orden)">
+                <i class="fa fa-caret-right" ng-if="_selected.id!=orden.id"></i>
+                <i class="fa fa-caret-down" ng-if="_selected.id==orden.id"></i>
+                #[[orden.id]] [[orden.descripcion]]<span class="text-muted font-13">,
+                [[orden.proyecto.nombre]]</span>
+            </h3>
+            <div class="btn-top-right">
+                <div style="display:inline-block;" dropdown-append-to-body ng-if="$root.LOGGED_USER.id==orden.usuario.id || $root.LOGGED_USER.id==orden.responsable.id" class="btn-states">
+
+                    <a tooltip="Cambiar estado" data-placement="top" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-cog"></i>
+                    </a>
+
+                    <ul estados-orden ng-model="orden.estado" class="dropdown-menu dropdown-custom dropdown-menu-right">
+                        <li role="presentation" class="dropdown-header" ng-if="_loading_data">Cargando estados...</li>
+                        <li ng-repeat="estado in availableOptions" class="estados-sample-li">
+                            <a style="font-size:13px !important;" href="javascript:;" ng-click="changeEstadoOrden(orden, estado)"><span style="background:#[[estado.color]];" class="proyecto-estado-sample">&nbsp;&nbsp;</span> [[estado.nombre]]</a>
+                        </li>
+                    </ul>
+                </div>
+                <span class="btn-states" dropdown-append-to-body>
+                    <a href="javascript:;" class="button-menu" data-toggle="dropdown" aria-expanded="false">
+                        <i class="mdi mdi-dots-vertical" style="margin-left: 10px"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-custom dropdown-menu-right" style="background-color: #fff;">
+                        <li>
+                            <a href="" data-toggle="modal" data-target="#modal-form-orden[[orden.id]]" tooltip="Editar" data-placement="top"><i class="fa fa-edit"></i> Editar</a>
+                        </li>
+                        <li>
+                            <a href="" data-toggle="modal" data-target="#modal-form-alerta-orden[[orden.id]]">
+                                <i class="mdi mdi-alert"></i> Crear Alerta
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" data-toggle="modal" data-target="#modal-orden-comentarios[[orden.id]]">
+                                <i class="mdi mdi-comment-multiple-outline"></i> Comentarios
+                            </a>
+                        </li>
+                        <li ng-if="orden.archivos.length">
+                            <a href="" data-toggle="modal" data-target="#modal-orden-attachment[[orden.id]]">
+                                <i class="mdi mdi-attachment"></i> Documentación adjunta
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" data-toggle="modal" data-target="#modal-delete-orden[[orden.id]]">
+                                <i class="fa fa-trash"></i> Eliminar
+                            </a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+            <ng-include src="'/static/mecanica/tpls/control/modals/form_orden.html'"></ng-include>
+            <ng-include src="'/static/mecanica/tpls/proyectos/modals/delete_orden.html'"></ng-include>
+            <ng-include src="'/static/mecanica/tpls/proyectos/modals/comentarios.html'"></ng-include>
+            <ng-include src="'/static/mecanica/tpls/documentos/modals/attachments_orden.html'"></ng-include>
+        </div>
+        <div class="panel-body" ng-show="_selected.id==orden.id">
+            <div class="row">
+                <div class="col-12">
+                    <p class="text-muted font-13 m-b-20">
+                        Listado de actividades asociadas a la órden de trabajo <b>#[[orden.id]]</b>.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div id="col-[[tarea.id]]-[[key]]" ng-if="!tarea.archivado" ng-repeat="tarea in orden.tareas | filter:filter_search as ordenResult" ng-show="!tarea.deleting" class="col-lg-3 col-md-4 col-sm-6 card-block-wrapper sortable-card">
+                    <div class="card block orden-trabajo">
+                        <div class="card-block">
+                            <div class="row card-header" style="background:#[[tarea.estado.color]]">
+                                <div class="col-10">
+                                    <div class="truncate text-muted font-13 m-b-0 orden-estado-selected">[[tarea.estado.nombre]]</div>
+                                </div>
+                                <div class="btn-top-right">
+                                    <span class="btn-states" ng-if="tarea.archivos.length">
+                                        <a style="margin-right:2px;" tooltip="Documentos adjuntos" data-placement="top" href="" data-toggle="modal" data-target="#modal-tarea-attachment[[tarea.id]]">
+                                            <i class="mdi mdi-attachment"></i>
+                                        </a>
+                                    </span>
+                                    <div class="btn-states" style="display:inline-block;" dropdown-append-to-body ng-if="$root.LOGGED_USER.id==tarea.usuario.id || $root.LOGGED_USER.id==tarea.responsable.id">
+                                        <a href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-cog"></i>
+                                        </a>
+                                        <ul estados-tarea ng-model="tarea.estado" class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                            <li role="presentation" class="dropdown-header" ng-if="_loading_data">Cargando estados...</li>
+                                            <li ng-repeat="estado in availableOptions" class="estados-sample-li">
+                                                <a style="font-size:13px !important;" href="javascript:;" ng-click="changeEstadoTarea(tarea, estado)"><span style="background:#[[estado.color]];" class="proyecto-estado-sample">&nbsp;&nbsp;</span> [[estado.nombre]]</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h4 class="m-t-0 header-title"><b># [[tarea.id]]</b></h4>
+                                        <span class="comment_date order-date">[[tarea.fecha|date:"mediumDate"]]</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12"><h4 class="m-t-0 header-title"><b>[[tarea.nombre]]</b></h4></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">Responsable: [[tarea.responsable.perfil.nombre]]</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12" ng-bind="tarea.descripcion|truncate:100"></div>
+                                </div>
+                                <hr/>
+                                <div ng-repeat="comment in tarea.comentarios | orderBy:'-fecha'" class="reply-wrapper" ng-show="!tarea.toggled_replies || $index<2">
+                                    <h5 ng-if="!comment.usuario || comment.usuario.id==$root.LOGGED_USER.id">
+                                        <b>Tú</b>
+                                        <span class="comment_date">a las [[comment.fecha|date:"medium"]]</span></h5>
+                                    <h5 ng-if="comment.usuario && comment.usuario.id!=$root.LOGGED_USER.id">
+                                        <b>[[comment.usuario.perfil.nombre]]</b>
+                                        <span class="comment_date">a las [[comment.fecha|date:"medium"]]</span>
+                                    </h5>
+                                    <p class="comment_answer" ng-bind="comment.texto"></p>
+                                </div>
+                                <div class="toggled-replies-responses" ng-show="tarea.comentarios.length>3 && tarea.toggled_replies" ng-click="tarea.toggled_replies=false">
+                                    Mostrar todos los comentarios
+                                </div>
+
+                            </div>
+                            <div class="card-title card-title-fixed">
+                                <div class="card-fixed-btns">
+                                    <a class="btn btn-sm btn-customs" href="" data-toggle="modal" data-target="#modal-form-tarea[[tarea.id]]" tooltip="Editar" data-placement="top"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-sm btn-customs" href="" data-toggle="modal" data-target="#modal-tarea-comentarios[[tarea.id]]" tooltip="Nuevo comentario" data-placement="top"><i class="mdi mdi-comment-multiple-outline"></i></a>
+                                    <a class="btn btn-sm btn-customs" href="" data-toggle="modal" data-target="#modal-form-alerta-tarea[[tarea.id]]" tooltip="Crear Alerta" data-placement="top"><i class="mdi mdi-alert"></i></a>
+                                    <a class="btn btn-sm btn-customs" data-toggle="modal" data-target="#modal-delete-tarea[[tarea.id]]" tooltip="Eliminar Tarea" data-placement="top"><i class="fa fa-trash-o"></i></a>
+                                    <a class="btn btn-sm btn-customs" ng-click="archivar(tarea)" tooltip="Archivar" data-placement="top"><i class="mdi mdi-archive"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-include src="'/static/mecanica/tpls/control/modals/delete_tarea.html'"></ng-include>
+                    <ng-include src="'/static/mecanica/tpls/control/modals/form_tarea.html'"></ng-include>
+                    <ng-include src="'/static/mecanica/tpls/control/modals/form_alerta_tarea.html'"></ng-include>
+                    <ng-include src="'/static/mecanica/tpls/control/modals/comentarios_tarea.html'"></ng-include>
+                    <ng-include src="'/static/mecanica/tpls/documentos/modals/attachments_tarea.html'"></ng-include>
+
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 card-block-wrapper">
+                    <a href="" data-toggle="modal" data-target="#modal-form-tarea">
+                    <div class="card block new">
+                        <div class="card-img">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                        <div class="card-block"></div>
+                    </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <ng-include src="'/static/mecanica/tpls/proyectos/modals/delete_orden.html'"></ng-include>
+        <ng-include src="'/static/mecanica/tpls/control/modals/form_alerta_orden.html'"></ng-include>
+    </div>
+
+    <div ng-show="!proyResult.length" class="alert alert-default">
+        <h5 class="text-uppercase font-bold m-b-0">No se encontraron resultados</h5>
+        <p class="font-13 m-t-10">Actualmente no existen órdenes de trabajo asignadas a usted.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <paginator ng-if="proyectos.results.length" route="/app/api/orden" ng-model="ordenes"></paginator>
+        </div>
+    </div>
+</div>
+<ng-include src="'/static/mecanica/tpls/control/modals/form_orden.html'"></ng-include>
+<ng-include src="'/static/mecanica/tpls/control/modals/form_tarea.html'"></ng-include>

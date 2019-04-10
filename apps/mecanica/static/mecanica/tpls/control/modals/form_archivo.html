@@ -1,0 +1,88 @@
+<div id="modal-archivo-info[[archivo.id]]" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="display: block;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" style="font-weight: 700;">Información del archivo</h4>
+            </div>
+            <form name="form" ajax-form callback="alertaCreated" method="POST" action="[['/app/api/docs/'+archivo.id+'/info/']]">
+                <div class="modal-body" style="max-height: 400px; overflow-y:auto;">
+                    <div class="row">
+                        <div class="col-1" style="padding-top:3px;">
+                            <i class="mdi mdi-folder file-icon" ng-if="archivo.tipo=='folder'"></i>
+                            <i class="mdi mdi-file-excel file-icon" ng-if="isExcel(archivo)"></i>
+                            <i class="mdi mdi-file-xml file-icon" ng-if="isHtml(archivo)"></i>
+                            <i class="mdi mdi-file-word-box file-icon" ng-if="isWord(archivo)"></i>
+                            <i class="mdi mdi-file-image file-icon" ng-if="isImage(archivo)"></i>
+                            <i class="mdi mdi-file-pdf file-icon" ng-if="isPdf(archivo)"></i>
+                            <i class="mdi mdi-file-document file-icon" ng-if="isText(archivo)"></i>
+                            <i class="mdi mdi-file-music file-icon" ng-if="isAudio(archivo)"></i>
+                            <i class="mdi mdi-file-powerpoint file-icon" ng-if="isPpt(archivo)"></i>
+                            <i class="mdi mdi-file-video file-icon" ng-if="isVideo(archivo)"></i>
+                            <i class="mdi mdi-archive file-icon" ng-if="isZip(archivo)"></i>
+                            <i class="mdi mdi-file file-icon" ng-if="isFile(archivo)"></i>
+                        </div>
+                        <div class="col-11">
+                            <input type="text" ng-change="form.needSave=true" name="nombre" required="required" ng-model="archivo.nombre" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class=" text-muted font-13">Detalle</div>
+                            <textarea ng-change="form.needSave=true" class="form-control form-control-sm" name="descripcion" ng-model="archivo.descripcion" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-4 text-muted font-13">
+                            Tipo de archivo
+                        </div>
+                        <div class="col-8 truncate">
+                            <span ng-if="archivo.tipo=='folder'">Carpeta</span>
+                            <span ng-if="archivo.tipo!='folder'" ng-bind="archivo.tipo"></span>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="archivo.tipo!='folder'">
+                        <div class="col-4 text-muted font-13">
+                            Ubicación
+                        </div>
+                        <div class="col-8 truncate">
+                            <a ng-href="archivo.ruta" target="_blank" ng-bind="archivo.ruta"></a>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-4 text-muted font-13">
+                            Creado por
+                        </div>
+                        <div class="col-8 truncate">
+                            [[archivo.usuario.perfil.nombre]]
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 text-muted font-13">
+                            Fecha creación
+                        </div>
+                        <div class="col-8 truncate">
+                            [[archivo.fecha|date:"medium"]]
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 text-muted font-13">
+                            Última modificación
+                        </div>
+                        <div class="col-8 truncate">
+                            [[archivo.fecha_modificacion|date:"medium"]]
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect btn-sm" data-dismiss="modal">Cerrar</button>
+                    <button ng-disabled="!form.needSave" ng-class="{disabled:!form.needSave}" type="submit" class="btn btn-primary waves-effect waves-light btn-sm submit-btn">Aceptar</button>
+                </div>
+                <input type="hidden" name="id" ng-value="archivo.id" />
+            </form>
+        </div>
+    </div>
+</div>

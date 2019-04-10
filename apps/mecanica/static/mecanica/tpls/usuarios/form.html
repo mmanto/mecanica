@@ -1,0 +1,147 @@
+<div id="form-wraper" ng-show="user">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Nuevo Usuario</h4>
+
+                <div class="clearfix"></div>
+                <p class="text-muted font-13 m-b-0">
+                    Ingrese los datos que le son solicitados en el siguiente formulario para crear un nuevo usuario.
+                </p>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card-box">
+                <form class="frm-ajax" method="POST" action="/app/api/usuarios/" ajax-form callback="userCreated">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="m-t-0 header-title"><b>Tipo de Usuario</b></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <select class="form-control" name="tipo" ng-model="user.perfil.tipo">
+                                    <option value="admin">Administrador General</option>
+                                    <option value="conf_layout">Configurador de Layout</option>
+                                    <option value="conf_proc_prod">Configurador de proceso de producción</option>
+                                    <option value="conf_proyecto">Coordinador de proyecto</option>
+                                    <option value="mod_cadena_abas">Moderador de cadena de abastecimiento</option>
+                                    <option value="cliente">Cliente</option>
+                                    <option value="proveedor">Proveedor</option>
+                                    <option value="empleado">Empleado</option>
+                                    <option value="operador">Operador</option>
+                                    <option value="operador_log">Operador de logística</option>
+                                    <option value="operador_mant">Operador de mantenimiento</option>
+                                    <option value="operador_ctrl">Operador de control</option>
+                                    <option value="resp_ing_proto">Responsable de ingeniería y prototipo</option>
+                                    <option value="resp_rec_costo_prod">Responsable de recursos y costos de producción</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="m-t-0 header-title"><b>Datos personales</b></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="field-1" class="control-label">Nombre</label>
+                                <input type="text" class="form-control" required="required" name="first_name" ng-model="user.first_name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="field-2" class="control-label">Apellido</label>
+                                <input type="text" class="form-control" name="last_name" ng-model="user.last_name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="m-t-0 header-title"><b>Datos de contacto</b></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="field-3" class="control-label">Domicilio</label>
+                                <input type="text" class="form-control" name="domicilio" ng-model="user.perfil.domicilio">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Ciudad</label>
+                                <input type="text" class="form-control" name="ciudad" ng-model="user.perfil.ciudad">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Código Postal</label>
+                                <input type="text" class="form-control" name="codigo_postal" ng-model="user.perfil.codigo_postal">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Tel&eacute;fono</label>
+                                <input type="text" class="form-control" name="telefono" ng-model="user.perfil.telefono">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Celular</label>
+                                <input type="text" class="form-control" name="celular" ng-model="user.perfil.celular">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="resalted access-data m-b-20">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="m-t-0 header-title"><b>Datos de acceso</b></h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">Correo</label>
+                                    <input type="text" class="form-control" required="required" name="email" ng-model="user.email">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="field-5" class="control-label">Contraseña</label>
+                                    <input type="password" class="form-control" name="password1" ng-model="user.pswd1">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="field-6" class="control-label">Repetir Contrase&ntilde;a</label>
+                                    <input type="password" class="form-control" name="password2" ng-model="user.pswd2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="frm-btns">
+                        <button type="submit" class="submit-btn btn btn-primary waves-effect waves-light btn-sm">Salvar Usuario</button>
+                        <button type="button" class="btn btn-secondary waves-effect btn-sm" ng-click="showUserList(false)">Cerrar</button>
+                    </div>
+                    <input type="hidden" name="id" ng-value="user.id" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<div id="modal-form-alerta-tarea[[tarea.id]]" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="display: block;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" ng-if="!alerta.id" style="font-weight: 700;">Nueva Alerta</h4>
+                <h4 class="modal-title" ng-if="alerta.id" style="font-weight: 700;">Editar Alerta</h4>
+            </div>
+            <form ajax-form callback="alertaCreated" method="POST" action="/app/api/alerta/">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <h4 class="m-t-0 content-title"><b>Tarea: #[[tarea.id]] [[tarea.nombre]]</b></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="field-1" class="control-label">Descripción</label>
+                                <textarea name="descripcion" required="required" ng-model="alerta.descripcion" class="form-control"></textarea>
+                                <p class="text-muted font-13 m-b-30">
+                                    Documente este evento o alerta.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect btn-sm" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light btn-sm submit-btn">Aceptar</button>
+                </div>
+                <input type="hidden" name="id" ng-value="alerta.id" />
+                <input type="hidden" name="orden_trabajo" ng-value="orden.id" />
+                <input type="hidden" name="tarea" ng-value="tarea.id" />
+            </form>
+        </div>
+    </div>
+</div>

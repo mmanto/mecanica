@@ -1,0 +1,108 @@
+<style type="text/css">
+body, html{
+  overflow: hidden !important;
+      height: 100%;
+}
+#wrapper, .content-page{
+    overflow: visible;
+}
+</style>
+<div id="main-wraper">
+    <div class="page-title-box page-title-editor">
+        <div class="row">
+            <div class="col-sm-12">
+                <button class="btn btn-default btn-menu" ng-click="fit()" tooltip="Centrar Layout" data-placement="bottom">
+                    <i class="mdi mdi-image-filter-center-focus"></i>
+                </button>
+                <button class="btn btn-default btn-menu" ng-click="zoom('+')" tooltip="Zoom In" data-placement="bottom">
+                    <i class="fa fa-search-plus"></i>
+                </button>
+                <button class="btn btn-default btn-menu" ng-click="zoom('-')" tooltip="Zoom Out" data-placement="bottom">
+                    <i class="fa fa-search-minus"></i>
+                </button>
+                <button class="btn btn-default btn-menu" ng-class="{active:activeBtn=='triangle'}" ng-click="activeBtnFn('triangle')" tooltip="Triángulo" data-placement="bottom">
+                    <i class="mdi mdi-triangle-outline"></i>
+                </button>
+                <button class="btn btn-default btn-menu" ng-class="{active:activeBtn=='circle'}" ng-click="activeBtnFn('circle')" tooltip="Círculo" data-placement="bottom">
+                    <i class="mdi mdi-checkbox-blank-circle-outline"></i>
+                </button>
+                <button class="btn btn-default btn-menu" ng-class="{active:activeBtn=='square'}" ng-click="activeBtnFn('square')" tooltip="Cuadrado" data-placement="bottom">
+                    <i class="fa fa-square-o"></i>
+                </button>
+                <button class="btn btn-default btn-menu" ng-class="{active:activeBtn=='rect'}" ng-click="activeBtnFn('rect')" tooltip="Rectángulo" data-placement="bottom">
+                    <i class="mdi mdi-crop-landscape"></i>
+                </button>
+                <button class="btn btn-default btn-menu" ng-class="{active:activeBtn=='rombo'}" ng-click="activeBtnFn('rombo')" tooltip="Rombo" data-placement="bottom">
+                    <i class="mdi mdi-crop-landscape"></i>
+                </button>
+                <button class="btn btn-default btn-menu" ng-class="{active:activeBtn=='star'}" ng-click="activeBtnFn('star')" tooltip="Estrella" data-placement="bottom">
+                    <i class="mdi mdi-star-outline"></i>
+                </button>
+                <button class="btn btn-default btn-menu" ng-class="{active:activeBtn=='text'}" ng-click="activeBtnFn('text')" tooltip="Texto" data-placement="bottom">
+                    <i class="mdi mdi-format-text"></i>
+                </button>
+                <tool-colorpicker ng-show="selections.length || activeBtn" ttitle="Color de fondo" data-menu-icon="mdi mdi-format-color-fill" data-menu-action="fill"></tool-colorpicker>
+            </div>
+        </div>
+    </div>
+    <div class="editor-wrapper opened">
+        <div class="main-editor">
+            <svg-editor></svg-editor>
+        </div>
+        <div class="options-editor">
+            <h4 class="m-t-10 m-b-0 header-title"><b>Elementos</b></h4>
+            <hr/>
+            <div class="elementos-details" ng-show="selections.length">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Código</label>
+                            <input type="text" ng-disabled="selections[0].deleting" ng-change="selections[0].changeState('unsaved')" ng-model="selections[0].codigo" placeholder="### ###" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Nombre</label>
+                            <input type="text" ng-disabled="selections[0].deleting" ng-change="selections[0].changeState('unsaved')" ng-model="selections[0].nombre" placeholder="Sin nombrar" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Tipo operación</label>
+                            <input type="text" ng-disabled="selections[0].deleting" ng-change="selections[0].changeState('unsaved')" ng-model="selections[0].tipo_operacion" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-if="selections[0].type=='text'">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Texto</label>
+                            <textarea ng-disabled="selections[0].deleting" ng-change="selections[0].changeState('unsaved')" ng-model="selections[0].attrs.txt" class="form-control form-control-sm" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Color</label>
+                            <input type="text" style="background:[[selections[0].attrs.fill]]" disabled="disabled" ng-change="selections[0].changeState('unsaved')" ng-model="selections[0].attrs.fill" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <p class="text-muted font-13 m-b-10" ng-if="selections[0].state!='saved' && !selections[0].saving">Existen cambios sin salvar</p>
+                            <button class="btn btn-sm btn-primary" ng-class="{disabled:selections[0].state=='saved' || selections[0].saving}" ng-disabled="selections[0].state=='saved' || selections[0].saving" ng-click="save()"><i class="mdi mdi-check"></i> Salvar</button>
+                            <button class="btn btn-sm btn-danger" ng-class="{disabled:selections[0].deleting}" ng-disabled="selections[0].deleting" ng-click="delSelection(selections[0])"><i class="fa fa-trash"></i> Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

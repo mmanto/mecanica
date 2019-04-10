@@ -1,0 +1,49 @@
+<ul class="nav">
+	<a target="_blank" href="{% url 'activos:board_new' %}" class="btn btn-primary form-control margin-b-30 btn-sm btn-custom">+ NUEVO TABLERO</a>
+    <li>
+    	<a href="{% url 'activos:index' %}#/" class="{% if request.resolver_match.url_name == 'index' %} active {% endif %}">
+    		<i class="fa fa-home"></i> Inicio
+    	</a>
+    </li>
+    <li>
+    	<a href="{% url 'activos:boards' %}#/" class="{% if request.resolver_match.url_name == 'boards' %} active {% endif %}" ng-class="{noactive:$root.original_route=='/proj/:id'}">
+    		<i class="fa fa-th"></i> Mis tableros
+    	</a>
+    </li>
+    <li ng-class="{selected:$root.original_route=='/proj/:id'}">
+    	<a href="" onclick="$(this).closest('li').toggleClass('selected')">
+    		<i class="fa fa-folder"></i> Proyectos <span ng-if="proyectos.length"><span ng-if="getActiveProjects(proyectos).length" ng-bind="'('+getActiveProjects(proyectos).length+')'"></span></span>
+    	</a>
+        <ul class="nav inner-nav" slim-scroll>
+            <li ng-repeat="proyecto in proyectos" ng-if="!proyecto.archivado">
+                <a class="truncate" ng-href="../../app/boards/#/proj/[[proyecto.id]]" ng-class="{active:$root.active_route=='/proj/'+proyecto.id}">
+                    <i class="fa fa-folder"></i> [[ proyecto.nombre ]]
+                </a>
+                <span>[[proyecto.tableros.length]]</span>
+            </li>
+            <div class="clearfix"></div>
+        </ul>
+        <button class="btn btn-default btn-sm form-control margin-t-10" data-toggle="modal" data-target="#modal-project-new">+ Crear Proyecto</button>
+    </li>
+    <li>
+    	<a href="{% url 'activos:archive' %}#/" class="{% if request.resolver_match.url_name == 'archive' %} active {% endif %}">
+    		<i class="fa fa-archive"></i> Archivo
+    	</a>
+    </li>
+    <li>
+    	<a href="{% url 'activos:users' %}">
+    		<i class="fa fa-users"></i> Usuarios
+    	</a>
+    </li>
+    <li>
+        <a href="{% url 'activos:account' %}#/">
+            <i class="fa fa-cog"></i> Mi Cuenta
+        </a>
+    </li>
+    <li>
+    	<a href="{% url 'tickets:tickets_index' %}" class="{% if request.resolver_match.url_name == 'tickets_index' or request.resolver_match.url_name == 'tickets_add' or request.resolver_match.url_name == 'tickets_edit' %} active {% endif %}">
+    		<i class="fa fa-tags"></i> Mis Tíckets
+    	</a>
+    </li>
+</ul>
+<ng-include src="'../../static/conceptboard/views/modals/project.html'"></ng-include>

@@ -1,0 +1,230 @@
+<div id="main-wraper">
+    <div class=" page-title-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="">
+                    <h4 class="m-t-0 content-title"><b>Flujos de procesos</b></h4>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-9">
+            <div class="card-box table-responsive">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4 class="m-t-0 header-title"><b>Productos</b></h4>
+                        <p class="text-muted font-13 m-b-20">
+                            Listado de productos
+                        </p>
+                    </div>
+                    <div class="col-md-4" ng-init="filter={v:'', t: 'Todos'}">
+                        <div class="dropdown pull-right">
+                            <a class=" btn" data-toggle="dropdown">
+                                <span ng-bind="filter.t" style="color: #555;"></span></i>
+                                <i class="fa fa-caret-down"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                <a class="dropdown-item" href="javascript:;" ng-click="filter={v:'', t: 'Todos'}" ng-bind="filter.t"></a>
+                                <a class="dropdown-item" href="javascript:;" ng-click="filter={v:'tipoA', t: 'Tipo A'}">Tipo A</a>
+                                <a class="dropdown-item" href="javascript:;" ng-click="filter={v:'tipoB', t: 'Tipo B'}">Tipo B</a>
+                                <a class="dropdown-item" href="javascript:;" ng-click="filter={v:'tipoC', t: 'Tipo C'}">Tipo C</a>
+                                <a class="dropdown-item" href="javascript:;" ng-click="filter={v:'tipoD', t: 'Tipo D'}">Tipo D</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" ng-init="filter1={v:'', t: 'Todos'}">
+                        <div class="dropdown pull-right">
+                            <a class=" btn" data-toggle="dropdown">
+                                <span ng-bind="filter1.t" style="color: #555;"></span></i>
+                                <i class="fa fa-caret-down"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                <a class="dropdown-item" href="javascript:;" ng-click="filter1={v:'', t: 'Todos'}" ng-bind="filter1.t"></a>
+                                <a class="dropdown-item" href="javascript:;" ng-click="filter1={v:'manufacturaA', t: 'Manufactura A'}">Manufactura A</a>
+                                <a class="dropdown-item" href="javascript:;" ng-click="filter1={v:'manufacturaB', t: 'Manufactura B'}">Manufactura B</a>
+                                <a class="dropdown-item" href="javascript:;" ng-click="filter1={v:'manufacturaC', t: 'Manufactura C'}">Manufactura C</a>
+                                <a class="dropdown-item" href="javascript:;" ng-click="filter1={v:'manufacturaD', t: 'Manufactura D'}">Manufactura D</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="prodResult.length">
+                    <div class="tables_wrapper">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="tables_left" id="datatable-buttons_length" ng-init="order_by='nombre'">
+                                    <label>Ordenar por
+                                        <select name="datatable-buttons_length" class="form-control form-control-sm" ng-model="order_by">
+                                            <option value="nombre">Nombre</option>
+                                            <option value="codigo">Código</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div id="datatable-buttons_filter" class="tables_filter">
+                                    <label style="text-align:right;">Buscar:
+                                        <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="datatable-buttons" ng-model="filter_search">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table id="datatable-buttons" class="table table-row-clickable" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th style="width: 100px">Código</th>
+                            <th style="width: 100px">Tipo</th>
+                            <th>Nombre</th>
+                            <th style="width: 100px">Manufactura</th>
+                            <th>Descripción</th>
+                            <th style="width: 180px"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="!producto.archivado" ng-class="{active:_selected.id==producto.id}" ng-click="selectProduct(producto)" ng-repeat="producto in productos.results | filter:filter_search | flt_tipo:filter.v | flt_manufactura:filter1.v | orderBy:order_by as prodResult">
+                                <td>[[producto.codigo]]</td>
+                                <td>[[producto.tipo]]</td>
+                                <td>[[producto.nombre]]</td>
+                                <td>[[producto.manufactura]]</td>
+                                <td>[[producto.descripcion|truncate:100]]</td>
+                                <td style="width: 180px">
+                                    <button ng-click="selectProduct(producto,'edit',$event)" class="btn btn-sm btn-default btn-icon" tooltip="Editar" data-placement="top"><i class="mdi mdi-pencil"></i></button>
+                                    <button data-toggle="modal" data-target="#modal-delete-producto[[producto.id]]" class="btn btn-sm btn-default btn-icon" tooltip="Eliminar" data-placement="top"><i class="fa fa-trash"></i></button>
+                                    <button ng-click="archivar(producto)" class="btn btn-sm btn-default btn-icon" tooltip="Archivar" data-placement="top"><i class="mdi mdi-archive"></i></button>
+                                    <button data-toggle="modal" data-target="#modal-flujo-producto[[producto.id]]" class="btn btn-sm btn-default btn-icon" tooltip="Editar Flujo" data-placement="top"><i class="mdi mdi-source-branch"></i></button>
+                                    <ng-include src="'/static/mecanica/tpls/flujo/modals/form.html'"></ng-include>
+                                    <ng-include src="'/static/mecanica/tpls/flujo/modals/delete_producto.html'"></ng-include>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <paginator ng-if="productos.results.length" route="/app/api/producto" ng-model="productos"></paginator>
+                <div ng-show="!prodResult.length" class="alert alert-default m-t-20">
+                    <h5 class="text-uppercase font-bold m-b-0">No se encontraron resultados</h5>
+                    <p class="font-13 m-t-10">Actualmente no existen productos para mostrar. Comience agregando nuevos productos al sistema.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <h4 class="m-t-10 m-b-0 header-title" style="display: inline-block;">
+                <b>Productos</b>
+            </h4>
+            <button class="pull-right btn btn-sm btn-primary" ng-click="selectProduct({},'new',$event)" tooltip="Nuevo producto" data-placement="left" style="position:relative;top:2px;"><i class="mdi mdi-plus"></i></button>
+            <hr/>
+            <div ng-if="_selected.id && !_selected.mode">
+                <div class="m-b-10">
+                    Creado por
+                    <b ng-if="_selected.usuario.id==$root.LOGGED_USER.id">tí</b>
+                    <b ng-if="_selected.usuario.id!=$root.LOGGED_USER.id">[[_selected.usuario.perfil.nombre]]</b>
+                    el [[_selected.fecha|date:"mediumDate"]]
+                </div>
+                <div class="m-b-10">
+                    <h5 class="m-0 font-15">Código:</h5>
+                    <p class="text-muted m-b-0" ng-bind="_selected.codigo"></p>
+                </div>
+                <div class="m-b-10">
+                    <h5 class="m-0 font-15">Nombre:</h5>
+                    <p class="text-muted m-b-0" ng-bind="_selected.nombre"></p>
+                </div>
+                <div class="m-b-10">
+                    <h5 class="m-0 font-15">Tipo de producto</h5>
+                    <p class="text-muted m-b-0" ng-bind="_selected.tipo"></p>
+                </div>
+                <div class="m-b-10">
+                    <h5 class="m-0 font-15">Tipo de manufactura</h5>
+                    <p class="text-muted m-b-0" ng-bind="_selected.manufactura"></p>
+                </div>
+                <div class="m-b-10">
+                    <h5 class="m-0 font-15">Descripción</h5>
+                    <p class="text-muted m-b-0" ng-bind="_selected.descripcion"></p>
+                </div>
+                <div>
+                    <h5 class="m-b-10 font-15">Flujo del proceso</h5>
+                    <div class="timeline-2">
+                        <div class="time-item" ng-repeat="flujo in _selected.flujos | orderBy:'orden'">
+                            <div class="item-info">
+                                <small class="text-muted">
+                                    Creado por
+                                    <span ng-if="flujo.usuario.id==$root.LOGGED_USER.id"><b>tí</b></span>
+                                    <span ng-if="flujo.usuario.id!=$root.LOGGED_USER.id"><b ng-bind="flujo.usuario.perfil.nombre"></b></span>
+                                    en [[flujo.fecha|date:'mediumDate']]
+                                </small>
+                                <p><strong>[[flujo.elemento.nombre]], Código [[flujo.elemento.codigo]]</strong></p>
+                            </div>
+                        </div>
+                   </div>
+                </div>
+            </div>
+            <div ng-if="_selected && _selected.mode=='edit' || _selected.mode=='new'">
+                <form class="frm-ajax" method="POST" action="/app/api/producto/" ajax-form callback="productoCreated">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Código</label>
+                                <input type="text" name="codigo" ng-disabled="selection.saving" ng-model="_selected.codigo" placeholder="### ###" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Nombre</label>
+                                <input type="text" ng-disabled="_selected.saving" name="nombre" ng-model="_selected.nombre" placeholder="" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Tipo producto</label>
+                                <select ng-disabled="_selected.saving" ng-model="_selected.tipo" name="tipo" class="form-control form-control-sm">
+                                    <option value="">Seleccione</option>
+                                    <option value="tipoA">Tipo A</option>
+                                    <option value="tipoB">Tipo B</option>
+                                    <option value="tipoC">Tipo C</option>
+                                    <option value="tipoD">Tipo D</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Tipo manufactura</label>
+                                <select ng-disabled="_selected.saving" ng-model="_selected.manufactura" name="manufactura" class="form-control form-control-sm">
+                                    <option value="">Seleccione</option>
+                                    <option value="manufacturaA">Manufactura A</option>
+                                    <option value="manufacturaB">Manufactura B</option>
+                                    <option value="manufacturaC">Manufactura C</option>
+                                    <option value="manufacturaD">Manufactura D</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Descripción</label>
+                                <textarea ng-disabled="_selected.saving" ng-model="_selected.descripcion" name="descripcion" class="form-control form-control-sm" rows="5"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button class="btn btn-sm btn-primary submit-btn" ng-class="{disabled:_selected.saving}" ng-disabled="_selected.saving" type="submit"><i class="mdi mdi-check"></i> Salvar producto</button>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id" ng-value="_selected.id" />
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

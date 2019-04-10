@@ -1,0 +1,74 @@
+<div class="row">
+    <div class="col-12">
+        <div class="row m-b-20">
+            <div class="col-md-12">
+                <a href="javascript:;" ng-if="folder_routes.length" ng-click="_gotoFolder()">Repositorio</a>
+                <span ng-if="!folder_routes.length">Repositorio</span>
+                <span ng-repeat="folder in folder_routes">/
+                    <a href="javascript:;" ng-bind="folder.nombre" ng-if="!$last" ng-click="_gotoFolder(folder)"></a>
+                    <span ng-bind="folder.nombre" ng-if="$last"></span>
+                </span>
+            </div>
+        </div>
+        <div ng-show="docsResult.length">
+            <div class="tables_wrapper m-b-10">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="tables_left" id="datatable-buttons_length" ng-init="order_by='nombre'">
+                            <label>Ordenar por
+                                <select name="datatable-buttons_length" class="form-control form-control-sm" ng-model="order_by">
+                                    <option value="nombre">Nombre</option>
+                                    <option value="fecha_modificacion">Fecha</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div id="datatable-buttons_filter" class="tables_filter">
+                            <label style="text-align:right;">
+                                <input type="search" class="form-control form-control-sm" placeholder="Buscar..." aria-controls="datatable-buttons" ng-model="filter_search">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">Nombre</div>
+                <div class="col-md-3">Modificado</div>
+                <div class="col-md-1">&nbsp;</div>
+            </div>
+            <div class="docs-wrapper">
+                <div class="row row-file" ng-repeat="doc in documentos | filter:filter_search | orderBy:['tipo!=\'folder\'', order_by] as docsResult">
+                    <div class="col-md-8 truncate">
+                        <i class="mdi mdi-folder file-icon" ng-if="doc.tipo=='folder'"></i>
+                        <i class="mdi mdi-file-excel file-icon" ng-if="isExcel(doc)"></i>
+                        <i class="mdi mdi-file-xml file-icon" ng-if="isHtml(doc)"></i>
+                        <i class="mdi mdi-file-word-box file-icon" ng-if="isWord(doc)"></i>
+                        <i class="mdi mdi-file-image file-icon" ng-if="isImage(doc)"></i>
+                        <i class="mdi mdi-file-pdf file-icon" ng-if="isPdf(doc)"></i>
+                        <i class="mdi mdi-file-document file-icon" ng-if="isText(doc)"></i>
+                        <i class="mdi mdi-file-music file-icon" ng-if="isAudio(doc)"></i>
+                        <i class="mdi mdi-file-powerpoint file-icon" ng-if="isPpt(doc)"></i>
+                        <i class="mdi mdi-file-video file-icon" ng-if="isVideo(doc)"></i>
+                        <i class="mdi mdi-archive file-icon" ng-if="isZip(doc)"></i>
+                        <i class="mdi mdi-file file-icon" ng-if="isFile(doc)"></i>
+
+                        <a href="javascript:;" ng-click="_openFolder(doc)" ng-if="doc.tipo=='folder'" ng-bind="doc.nombre"></a>
+                        <a href="" ng-if="doc.tipo!='folder'" ng-bind="doc.nombre"></a>
+                    </div>
+                    <div class="col-md-3" style="padding-right:0">
+                        [[doc.fecha_modificacion|date:'mediumDate']]
+                    </div>
+                    <div class="col-md-1" style="padding-left:0">
+                        <i style="cursor:pointer;" class="fa fa-plus-square btn-sm" ng-if="doc.tipo!='folder'" ng-click="_selectFile(doc)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="!docsResult.length" class="alert alert-default">
+            <h5 class="text-uppercase font-bold m-b-0">No se encontraron resultados</h5>
+            <p class="font-13 m-t-10">Para agregar o modificar documentos debe ir al módulo de Gestión de documentos y materiales de consulta.</p>
+        </div>
+    </div>
+</div>

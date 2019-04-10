@@ -1,0 +1,109 @@
+<div id="main-wraper" ng-hide="user">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Usuarios del sistema</h4>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card-box table-responsive">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h4 class="m-t-0 header-title"><b>Usuarios</b></h4>
+                        <p class="text-muted font-13 m-b-20">
+                            Listado de usuarios del sistema
+                        </p>
+                    </div>
+                    <div class="col-md-2" style="text-align: right; padding-right: 25px;">
+                        <button class="btn btn-primary waves-effect waves-light btn-sm" type="button" ng-click="showUserList({})"><i class="mdi mdi-plus"></i> NUEVO</button>
+                    </div>
+                </div>
+                <div class="tables_wrapper">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="tables_left" id="datatable-buttons_length" ng-init="order_by='perfil.nombre'">
+                                <label>Ordenar por
+                                    <select name="datatable-buttons_length" class="form-control form-control-sm" ng-model="order_by">
+                                        <option value="perfil.nombre">Nombre</option>
+                                        <option value="perfil.tipo_usuario.nombre">Tipo</option>
+                                        <option value="date_joined">Fecha</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div id="datatable-buttons_filter" class="tables_filter">
+                                <label style="text-align:right;">Buscar:
+                                    <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="datatable-buttons" ng-model="filter_search">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table ng-show="usResult.length" id="datatable-buttons" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Correo</th>
+                        <th>Tipo</th>
+                        <th style="width: 40px;"></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-repeat="user in usuarios.results | filter:filter_search | orderBy:order_by as usResult">
+                            <td>[[user.first_name]]</td>
+                            <td>[[user.last_name]]</td>
+                            <td>[[user.email]]</td>
+                            <td>
+                                <span ng-if="user.perfil.tipo=='admin'">Administrador General</span>
+                                <span ng-if="user.perfil.tipo=='conf_layout'">Configurador de Layout</span>
+                                <span ng-if="user.perfil.tipo=='conf_proc_prod'">Configurador de proceso de producción</span>
+                                <span ng-if="user.perfil.tipo=='conf_proyecto'">Coordinador de proyecto</span>
+                                <span ng-if="user.perfil.tipo=='mod_cadena_abas'">Moderador de cadena de abastecimiento</span>
+                                <span ng-if="user.perfil.tipo=='cliente'">Cliente</span>
+                                <span ng-if="user.perfil.tipo=='proveedor'">Proveedor</span>
+                                <span ng-if="user.perfil.tipo=='empleado'">Empleado</span>
+                                <span ng-if="user.perfil.tipo=='operador'">Operador</span>
+                                <span ng-if="user.perfil.tipo=='operador_log'">Operador de logística</span>
+                                <span ng-if="user.perfil.tipo=='operador_mant'">Operador de mantenimiento</span>
+                                <span ng-if="user.perfil.tipo=='operador_ctrl'">Operador de control</span>
+                                <span ng-if="user.perfil.tipo=='resp_ing_proto'">Responsable de ingeniería y prototipo</span>
+                                <span ng-if="user.perfil.tipo=='resp_rec_costo_prod'">Responsable de recursos y costos de producción</span>
+                            </td>
+                            <td style="width: 40px;">
+                                <span class="pull-right">
+                                    <a href="javascript:;" class="button-menu" data-toggle="dropdown" aria-expanded="false" style="color: #707070;">
+                                        <i class="mdi mdi-dots-vertical" style="margin-left: 5px"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-custom dropdown-menu-right" style="background-color: #fff;">
+                                        <li>
+                                            <a href="javascript:;" ng-click="showUserList(user)" style="font-size: 12px; padding: 5px 30px 5px 10px;"><i class="mdi mdi-border-color"></i> Editar</a>
+                                        </li>
+                                        <li ng-if="$root.LOGGED_USER.id!=user.id">
+                                            <a href="" data-toggle="modal" data-target="#modal-del-user[[user.id]]" style="font-size: 12px; padding: 5px 30px 5px 10px;"><i class="mdi mdi-window-close"></i> Eliminar</a>
+                                        </li>
+                                    </ul>
+                                </span>
+                                <ng-include src="'/static/mecanica/tpls/usuarios/modals/delete.html'"></ng-include>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <div ng-show="!usResult.length" class="alert alert-default">
+                    <h5 class="text-uppercase font-bold m-b-0">No se encontraron resultados</h5>
+                    <p class="font-13 m-t-10">Para agregar usuarios haga click en el botón <b>NUEVO</b> de arriba.</p>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-include src="'/static/mecanica/tpls/usuarios/form.html'"></ng-include>

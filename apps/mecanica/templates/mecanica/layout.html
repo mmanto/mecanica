@@ -1,0 +1,369 @@
+{% extends "base_app.html" %}
+{% block ng_ctr %} ng-controller="MainController as main" {% endblock %}
+{% load staticfiles %}
+{% block stylesheets %}
+	{{ block.super }}
+    <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars-->
+    <link href="{% static 'mecanica/plugins/bootstrap-fileinput/bootstrap-fileinput.css' %}" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="{% static 'mecanica/angular/vendors/notify/angular-ui-notification.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'mecanica/plugins/jquery-minicolors/jquery.minicolors.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'mecanica/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'mecanica/angular/vendors/dragular/dist/dragular.css' %}"/>
+{% endblock %}
+
+{% block favicon %}{% static "conceptboard/images/logo_icon_small.png" %}{% endblock favicon %}
+
+{% block body_id %}main-concept-container{% endblock %}
+
+{% block ng_attrs %}ng-app="mmApp"{% endblock%}
+
+{% block javascripts %}
+	{{ block.super }}
+    <script src="{% static 'mecanica/plugins/jquery-minicolors/jquery.minicolors.js' %}"></script>
+    <script src="{% static 'mecanica/plugins/d3/d3.min.js' %}"></script>
+    <script src="{% static 'mecanica/plugins/bootstrap-fileinput/bootstrap-fileinput.js' %}" type="text/javascript"></script>
+    <script src="{% static 'mecanica/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'mecanica/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js' %}"></script>
+    <script src="{% static 'mecanica/angular/vendors/angular.js' %}"></script>
+    <script src="{% static 'mecanica/angular/vendors/notify/angular-ui-notification.min.js' %}"></script>
+    <script src="{% static 'mecanica/angular/vendors/angular-minicolors.js' %}"></script>
+    <script src="{% static 'mecanica/angular/vendors/html5-sortable.js' %}" type="text/javascript"></script>
+
+
+    <script src="{% static 'mecanica/angular/vendors/dragular/dist/dragular.js' %}" type="text/javascript"></script>
+
+    <script src="{% static 'mecanica/angular/vendors/timeago/dist/angular-timeago.min.js' %}"></script>
+    <script src="{% static 'mecanica/angular/vendors/timeago/dist/angular-timeago-core.min.js' %}"></script>
+	<script src="{% static 'mecanica/angular/vendors/timeago/src/languages/time-ago-language-es_LA.js' %}"></script>
+
+    <script src="{% static 'mecanica/angular/vendors/angular-route.js' %}" type="text/javascript"></script>
+    <script src="{% static 'mecanica/angular/mecanica.js' %}"></script>
+    <script type="text/javascript">
+    	app.LOGGED_USER = {
+    		id      : '{{request.user.id}}',
+    		date_joined : '{{request.user.date_joined}}',
+    		is_active   : '{{request.user.is_active}}',
+            name    : '{{request.user.first_name}} {{request.user.last_name|default_if_none:""}}',
+            last    : '{{request.user.last_name|default_if_none:""}}',
+            username: '{{request.user.username}}',
+            first_name: '{{request.user.first_name}}',
+            last_name: '{{request.user.last_name|default_if_none:""}}',
+            email	: '{{request.user.email}}',
+            cuenta_id: '{{request.user.perfil.cuenta.id}}',
+            cuenta_name: '{{request.user.perfil.cuenta.nombre}}',
+            imagen : '{{request.user.perfil.imagen|default_if_none:""}}',
+            descripcion: '{{request.user.perfil.descripcion|default_if_none:""}}',
+            rol: '{{request.user.perfil.tipo}}',
+    	};
+    	app.ADMIN_CONFIG = {
+            defaults    : {
+                image: '/uploads/usuarios/default.png'
+            }
+        };
+    </script>
+{% endblock %}
+
+{% block body %}
+
+	<div id="wrapper">
+	{% block header %}
+		<div class="topbar">
+
+            <!-- LOGO -->
+            <div class="topbar-left">
+                <div class="text-center">
+                    <a href="/app/#/" class="logo"><i class="fa fa-cogs"></i> <span>MMecánica</span></a>
+                </div>
+            </div>
+
+            <!-- Button mobile view to collapse sidebar menu -->
+            <nav class="navbar-custom">
+
+                <ul class="list-inline float-right mb-0">
+
+                    <li class="list-inline-item dropdown notification-list">
+                        <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="" role="button"
+                           aria-haspopup="false" aria-expanded="false">
+                            <img ng-src="/media/[[$root.LOGGED_USER.imagen|defaultPicture]]" alt="user" class="rounded-circle">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right profile-dropdown " aria-labelledby="Preview">
+                            <!-- item-->
+                            <div class="dropdown-item noti-title">
+                                <h5 class="text-overflow">
+                                    <small ng-if="$root.LOGGED_USER.rol=='admin'">Administrador General</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='conf_layout'">Configurador de Layout</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='conf_proc_prod'">Configurador de proceso de producción</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='conf_proyecto'">Coordinador de proyecto</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='mod_cadena_abas'">Moderador de cadena de abastecimiento</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='cliente'">Cliente</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='proveedor'">Proveedor</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='empleado'">Empleado</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='operador'">Operador</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='operador_log'">Operador de logística</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='operador_mant'">Operador de mantenimiento</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='operador_ctrl'">Operador de control</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='resp_ing_proto'">Responsable de ingeniería y prototipo</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='resp_rec_costo_prod'">Responsable de recursos y costos de producción</small>
+                                </h5>
+                            </div>
+
+                            <!-- item-->
+                            <a href="" class="dropdown-item notify-item">
+                                <i class="mdi mdi-account"></i> <span>Perfil</span>
+                            </a>
+
+                            <!-- item-->
+                            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                <i class="mdi mdi-settings"></i> <span>Configuraciones</span>
+                            </a>
+
+                            <!-- item-->
+                            <a href="/app/logout" class="dropdown-item notify-item">
+                                <i class="mdi mdi-logout"></i> <span>Salir</span>
+                            </a>
+
+                        </div>
+                    </li>
+
+                </ul>
+
+                <ul class="list-inline menu-left mb-0">
+                    <li class="float-left">
+                        <button class="button-menu-mobile open-left waves-light waves-effect">
+                            <i class="mdi mdi-menu"></i>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+	{% endblock %}
+
+	{% block nav %}
+		<!-- ========== Left Sidebar Start ========== -->
+        <div class="left side-menu">
+            <div class="sidebar-inner slimscrollleft">
+                <div class="superior-part">
+                    <div class="text-center">
+
+                        <a href="/app/#/" class="logo"><i class="fa fa-cogs"></i> <span>MMecanica</span></a>
+                        <a href="/app/#/" class="logo logo-img"><i class="fa fa-cogs"></i></a>
+                    </div>
+
+                    <div class="text-center dropdown notification-list">
+                        <a href="" class="open-left">
+                            <i class="mdi mdi-menu"></i>
+                        </a>
+                        <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="" role="button"
+                           aria-haspopup="false" aria-expanded="false">
+                            <span class="logged-user-name">{{request.user.first_name}} {{request.user.last_name}}</span>
+                            <img ng-src="/media/[[$root.LOGGED_USER.imagen|defaultPicture]]" alt="user" class="rounded-circle">
+                        </a>
+                        <div class="dropdown-menu profile-dropdown dropdown-menu-right" aria-labelledby="Preview">
+                            <!-- item-->
+                            <div class="dropdown-item noti-title">
+                                <h5 class="text-overflow">
+                                    <small ng-if="$root.LOGGED_USER.rol=='admin'">Administrador General</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='conf_layout'">Configurador de Layout</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='conf_proc_prod'">Configurador de proceso de producción</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='conf_proyecto'">Coordinador de proyecto</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='mod_cadena_abas'">Moderador de cadena de abastecimiento</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='cliente'">Cliente</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='proveedor'">Proveedor</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='empleado'">Empleado</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='operador'">Operador</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='operador_log'">Operador de logística</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='operador_mant'">Operador de mantenimiento</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='operador_ctrl'">Operador de control</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='resp_ing_proto'">Responsable de ingeniería y prototipo</small>
+                                    <small ng-if="$root.LOGGED_USER.rol=='resp_rec_costo_prod'">Responsable de recursos y costos de producción</small>
+                                </h5>
+                            </div>
+
+                            <!-- item-->
+                            <a href="" class="dropdown-item notify-item">
+                                <i class="mdi mdi-account-star-variant"></i> <span>Perfil</span>
+                            </a>
+
+                            <!-- item-->
+                            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                <i class="mdi mdi-settings"></i> <span>Configuraciones</span>
+                            </a>
+
+                            <!-- item-->
+                            <a href="/app/logout" class="dropdown-item notify-item">
+                                <i class="mdi mdi-logout"></i> <span>Salir</span>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+                <!--- Divider -->
+                <div id="sidebar-menu">
+                    <ul>
+                        <li>
+                            <a href="/app/#/" class="waves-effect waves-primary" ng-class="{active: (active_route=='/')}">
+                            	<i class="mdi mdi-view-dashboard"></i><span> Inicio </span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/app/#/layout" class="waves-effect waves-primary" ng-class="{active: (active_route|match:'/layout')}">
+                            	<i class="mdi mdi-drawing-box"></i> <span>Layouts</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/app/#/flujo" class="waves-effect waves-primary" ng-class="{active: (active_route|match:'/flujo')}">
+                                <i class="mdi mdi-source-branch "></i> <span>Flujo de procesos</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/app/#/proyectos" class="waves-effect waves-primary" ng-class="{active: (active_route|match:'/proyectos')}">
+                                <i class="mdi mdi-folder-multiple"></i> <span>Gestión de proyectos</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/app/#/produccion" class="waves-effect waves-primary" ng-class="{active: (active_route|match:'/produccion')}">
+                                <i class="mdi mdi-factory"></i> <span>Control de producción</span>
+                            </a>
+                        </li>
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect waves-primary" ng-class="{active: (active_route|match:'/control')}">
+                                <i class="mdi mdi-calendar-check"></i> <span>Ejecución de producción</span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="list-unstyled" ng-class="{expanded:(active_route|match:'/control')}">
+                                <li>
+                                    <a href="/app/#/control/espacio" ng-class="{subdrop: (active_route=='/control/espacio')}">Mi espacio personalizado</a>
+                                </li>
+                                <li>
+                                    <a href="/app/#/control/tareas" ng-class="{subdrop: (active_route=='/control/tareas')}">Gestión de órdenes y tareas</a>
+                                </li>
+                                <li>
+                                    <a href="/app/#/control/documentos" ng-class="{subdrop: (active_route=='/control/documentos')}">Documentos y Materiales </a>
+                                </li>
+                                <li>
+                                    <a href="/app/#/control/alertas" ng-class="{subdrop: (active_route=='/control/alertas')}">Alertas y eventos</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/app/#/usuarios" class="waves-effect waves-primary" ng-class="{active: (active_route|match:'/usuarios')}">
+                            	<i class="mdi mdi-account-multiple"></i> <span>Usuarios</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="clearfix"></div>
+
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+            <footer class="footer">
+                {%now "Y"%} © <span>- metalmecanica.com</span>
+            </footer>
+        </div>
+        <!-- Left Sidebar End -->
+	{% endblock %}
+	    <!-- ============================================================== -->
+	    <!-- Start right Content here -->
+	    <!-- ============================================================== -->
+	    <div class="content-page">
+	    	<!-- Start content -->
+			<div class="content">
+			    <div class="container-fluid">
+	    			{% block content %} {% endblock %}
+	    		</div>
+	    	</div>
+
+	    </div>
+	    <!-- ============================================================== -->
+	    <!-- End Right content here -->
+	    <!-- ============================================================== -->
+
+	{% block right_sidebar %}
+        <!-- Right Sidebar -->
+        <div class="side-bar right-bar">
+            <div class="">
+                <ul class="nav nav-tabs tabs-bordered nav-justified">
+                    <li class="nav-item">
+                        <a href="#home-2" class="nav-link active" data-toggle="tab" aria-expanded="false">
+                            Actividades
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#messages-2" class="nav-link" data-toggle="tab" aria-expanded="true">
+                            Config
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="home-2">
+                        <div class="timeline-2">
+                            <div class="time-item">
+                                <div class="item-info">
+                                    <small class="text-muted">5 minutes ago</small>
+                                    <p><strong><a href="" class="text-info">Carlos</a></strong> Cambio su foto <strong>"DSC000586.jpg"</strong></p>
+                                </div>
+                            </div>
+
+                       </div>
+                    </div>
+
+
+                    <div class="tab-pane" id="messages-2">
+
+                        <div class="row m-t-20">
+                            <div class="col-8">
+                                <h5 class="m-0 font-15">Notificaciones</h5>
+                                <p class="text-muted m-b-0"><small>Que necesita tu equipo?</small></p>
+                            </div>
+                            <div class="col-4 text-right">
+                                <input type="checkbox" checked data-plugin="switchery" data-color="#3bafda" data-size="small"/>
+                            </div>
+                        </div>
+
+                        <div class="row m-t-20">
+                            <div class="col-8">
+                                <h5 class="m-0 font-15">API</h5>
+                                <p class="m-b-0 text-muted"><small>Enable/Disable access</small></p>
+                            </div>
+                            <div class="col-4 text-right">
+                                <input type="checkbox" checked data-plugin="switchery" data-color="#3bafda" data-size="small"/>
+                            </div>
+                        </div>
+
+                        <div class="row m-t-20">
+                            <div class="col-8">
+                                <h5 class="m-0 font-15">Configuraciones</h5>
+                                <p class="m-b-0 text-muted"><small></small></p>
+                            </div>
+                            <div class="col-4 text-right">
+                                <input type="checkbox" checked data-plugin="switchery" data-color="#3bafda" data-size="small"/>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Right-bar -->
+    {% endblock %}
+    </div>
+
+
+
+	{% block footer %} {% endblock %}
+
+	<div id="loaging-data" ng-if="loadingView">
+        <div id="wrapper"></div>
+        <div id="indicator"><i class="fa fa-spinner fa-spin"></i> Cargando...</div>
+    </div>
+
+{% endblock %}

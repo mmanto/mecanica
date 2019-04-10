@@ -1,0 +1,81 @@
+<div id="modal-form-tarea[[tarea.id]]" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="display: block;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" ng-if="!tarea.id" style="font-weight: 700;">Nueva Tarea o Actividad</h4>
+                <h4 class="modal-title" ng-if="tarea.id" style="font-weight: 700;">Editar Actividad</h4>
+            </div>
+            <form ajax-form callback="tareaCreated" method="POST" action="/app/api/tarea/">
+                <div class="modal-body">
+                    <ul class="nav nav-tabs tabs-bordered">
+                        <li class="nav-item">
+                            <a href="" data-target="#tarea-generales-[[orden.id]]" class="nav-link active" data-toggle="tab" aria-expanded="false">
+                                Datos de la tarea
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" data-target="#tarea-attachments-[[orden.id]]" class="nav-link" data-toggle="tab" aria-expanded="false">
+                                Materiales y Documentación
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tarea-generales-[[orden.id]]">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="field-1" class="control-label">Título</label>
+                                        <input type="text" name="nombre" required="required" ng-model="tarea.nombre" class="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="field-1" class="control-label">Detalle</label>
+                                        <textarea name="descripcion" required="required" ng-model="tarea.descripcion" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="field-1" class="control-label">Responsable</label>
+                                        <select class="form-control" name="responsable" required="required" filter="all" ng-model="tarea.responsable" select-usuario-by-type style="font-size: 12px;" ng-options="option.perfil.nombre for option in availableOptions track by option.id">
+                                            <option ng-if="_loading_data">Cargando...</option>
+                                            <option value="" ng-show="!_loading_data">Seleccione</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tarea-attachments-[[orden.id]]">
+                            <div class="row m-b-10" ng-if="tarea.archivos" ng-repeat="doc in tarea.archivos">
+                                <div class="col-11 truncate">
+                                    <a href="" ng-if="doc.tipo!='folder'"><i class="mdi mdi-attachment"></i> [[doc.nombre]]</a>
+                                </div>
+                                <div class="col-1">
+                                    <button type="button" style="position:static;width: auto; height: auto;" ng-click="removeArchivo(tarea.archivos, doc)" class="close">×</button>
+                                </div>
+                            </div>
+                            <div style="display:none">
+                                <select multiple="multiple" name="archivos">
+                                    <option selected="selected" ng-value="doc.id" ng-repeat="doc in tarea.archivos" ng-bind="doc.nombre"></value>
+                                </select>
+                            </div>
+                            <docs-attachment ng-model="tarea"></docs-attachment>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect btn-sm" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light btn-sm submit-btn">Aceptar</button>
+                </div>
+                <input type="hidden" name="id" ng-value="tarea.id" />
+                <input type="hidden" name="orden_trabajo" ng-value="orden.id || _selected.id" />
+            </form>
+        </div>
+    </div>
+</div>

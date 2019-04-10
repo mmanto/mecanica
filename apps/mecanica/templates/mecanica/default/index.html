@@ -1,0 +1,25 @@
+{% extends "mecanica/layout.html" %}
+
+{% block title %} Metal Mecánica {% endblock %}
+{% load staticfiles %}
+{% block content %}
+
+	<div id="views-container" ng-view></div>
+
+{% endblock %}
+{% block custom_javascripts %}
+    <script src="{% static 'mecanica/angular/app/main.js' %}" type="text/javascript"></script>
+    <script src="{% static 'mecanica/angular/app/filters.js' %}" type="text/javascript"></script>
+    <script src="{% static 'mecanica/angular/app/factories/figure.js' %}" type="text/javascript"></script>
+    <script src="{% static 'mecanica/angular/app/factories/SVG.js' %}" type="text/javascript"></script>
+    <script src="{% static 'mecanica/angular/app/directives.js' %}" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+    	angular.module('mmApp').constant("CSRF_TOKEN", {
+    		csrf_token : '{{csrf_token}}'
+    	})
+    </script>
+    <script src="{% static 'mecanica/angular/app/services.js' %}" type="text/javascript"></script>
+    <script src="{% static 'mecanica/angular/app/controllers.js' %}" type="text/javascript"></script>
+{% endblock %}

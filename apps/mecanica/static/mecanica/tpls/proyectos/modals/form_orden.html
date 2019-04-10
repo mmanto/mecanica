@@ -1,0 +1,41 @@
+<div id="modal-form-orden[[orden.id]]" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="display: block;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" ng-if="!orden.id" style="font-weight: 700;">Nueva Órden de Trabajo</h4>
+                <h4 class="modal-title" ng-if="orden.id" style="font-weight: 700;">Editar Órden de Trabajo</h4>
+            </div>
+            <form ajax-form callback="ordenCreated" method="POST" action="/app/api/orden/">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="field-1" class="control-label">Responsable</label>
+                                <select class="form-control" name="responsable" required="required" filter="all" ng-model="orden.responsable" select-usuario-by-type style="font-size: 12px;" ng-options="option.perfil.nombre for option in availableOptions track by option.id">
+                                    <option ng-if="_loading_data">Cargando...</option>
+                                    <option value="" ng-show="!_loading_data">Seleccione</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="field-1" class="control-label">Detalle</label>
+                                <textarea name="descripcion" ng-model="orden.descripcion" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect btn-sm" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light btn-sm submit-btn">Aceptar</button>
+                </div>
+                <input type="hidden" name="id" ng-value="orden.id" />
+                <input type="hidden" name="proyecto" ng-value="proyecto.id || _selected.id" />
+            </form>
+        </div>
+    </div>
+</div>

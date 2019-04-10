@@ -1,0 +1,75 @@
+<div id="modal-flujo-producto[[producto.id]]" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="display: block;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" style="font-weight: 700;">Asignar | Modificar Flujo</h4>
+                <div class="row m-t-20">
+                    <div class="col-md-12">
+                        Código: <label class="badge badge-default" ng-bind="producto.codigo"></label>
+                        Nombre: <label class="badge badge-default" ng-bind="producto.nombre"></label>
+                        Tipo: <label class="badge badge-default" ng-bind="producto.tipo"></label>
+                        Manufactura: <label class="badge badge-default" ng-bind="producto.manufactura"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="m-t-0 header-title"><b>Proceso</b></h4>
+                    </div>
+                </div>
+                <div style="max-height:300px; overflow-y:auto; overflow-x:hidden;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table">
+                                <tbody html-sortable="sections_sortable_option" ng-model="producto.flujos">
+                                    <tr class="sortable-row" ng-if="!elemento.deleting" ng-repeat="elemento in producto.flujos | orderBy:'orden'">
+                                        <td style="width:20px; padding-left:0; padding-right:0; font-size:22px;">
+                                            <span ng-if="elemento.id" class="reorder-button mdi mdi-drag-vertical"></span>
+                                        </td>
+                                        <td style="width:20px">
+                                            <span ng-if="elemento.id" ng-bind="elemento.orden"></span>
+                                            <span ng-if="!elemento.id" ng-bind="$index+1"></span>
+                                        </td>
+                                        <td>[[elemento.elemento.nombre]]</td>
+                                        <td>[[elemento.elemento.codigo]]</td>
+                                        <td>[[elemento.elemento.tipo_operacion]]</td>
+                                        <td style="width:100px;" ng-show="elemento.id">
+                                            <button ng-click="" class="btn btn-sm btn-default btn-icon" tooltip="Editar" data-placement="top"><i class="mdi mdi-pencil"></i></button>
+                                            <button ng-click="deleteFlujo(elemento)" class="btn btn-sm btn-default btn-icon" tooltip="Eliminar" data-placement="top"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                        <td style="width:100px;" ng-if="!elemento.id">Salvando...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div ng-show="!producto.flujos.length" class="alert alert-default m-t-10">
+                                <h5 class="text-uppercase font-bold m-b-0">No existen elementos</h5>
+                                <p class="font-13 m-t-10 m-b-0">No se han definido un flujo de procesos para este producto aún.</p>
+                                <p class="font-13">Comience agregando elementos al proceso y luego defina el órden en que se ejecutarán.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-md-4">
+                        <select class="form-control" ng-model="nueva_operacion.layout_selected" select-layouts ng-options="option.nombre for option in availableOptions track by option.id">
+                            <option ng-if="_loading_data">Cargando...</option>
+                            <option value="" ng-show="!_loading_data">Seleccione</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-control" value="nueva_operacion.layout_selected.id" ng-disabled="!nueva_operacion.layout_selected" ng-model="nueva_operacion.elemento_selected" select-elementos ng-options="option.nombre for option in availableOptions track by option.id">
+                            <option ng-if="_loading_data">Cargando...</option>
+                            <option value="" ng-show="!_loading_data">Seleccione</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <button ng-click="agregarOperacion(nueva_operacion.elemento_selected)" class="btn btn-primary" ng-disabled="!nueva_operacion.elemento_selected"><i class="mdi mdi-plus"></i> Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

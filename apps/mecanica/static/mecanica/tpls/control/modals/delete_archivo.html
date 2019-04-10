@@ -1,0 +1,28 @@
+<div class="modal fade" id="modal-del-archivo[[archivo.id]]" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-smd">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                Eliminar Archivo
+            </div>
+            <div class="modal-body">
+                <div class="modal-body-content">
+                    <div ng-if="archivo.tipo=='folder'">
+                        <h4 style="margin-top:0;">¿Está seguro que desea eliminar la carpeta <b>[[archivo.nombre]]</b>?</h4>
+                        <p>Al confirmar esta acción, los archivos o subcarpetas contenidos en ella serán eliminados tambien.</p>
+                    </div>
+                    <div ng-if="archivo.tipo!='folder'">
+                        <h4 style="margin-top:0;">¿Está seguro que desea eliminar el archivo <b>[[archivo.nombre]]</b>?</h4>
+                    </div>
+                    <div class="modal-buttons clearfix">
+                        <form ajax-form callback="archivoDeleted" method="POST" action="[['/app/api/docs/'+archivo.id+'/remove/']]">
+                            <input type="hidden" name="id" ng-value="archivo.id" />
+                            <button class="btn btn-danger pull-right" type="submit">Eliminar</button>
+                            <button class="btn btn-gray pull-right" data-dismiss="modal" type="button" style="margin-right: 10px;">Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

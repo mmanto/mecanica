@@ -1,0 +1,52 @@
+<div id="modal-form-alerta[[alerta.id]]" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="display: block;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" ng-if="!alerta.id" style="font-weight: 700;">Nueva Alerta</h4>
+                <h4 class="modal-title" ng-if="alerta.id" style="font-weight: 700;">Editar Alerta</h4>
+            </div>
+            <form ajax-form callback="alertaCreated" method="POST" action="/app/api/alerta/">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="field-1" class="control-label">Órden de trabajo</label>
+                                <select name="orden_trabajo" required="required" class="form-control" ng-model="alerta.orden_selected" select-ordenes ng-options="'#'+option.id+', '+option.proyecto.nombre for option in availableOptions track by option.id">
+                                    <option ng-if="_loading_data">Cargando...</option>
+                                    <option value="" ng-show="!_loading_data">Seleccione</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="field-1" class="control-label">Tarea</label>
+                                <select name="tarea" class="form-control" value="alerta.orden_selected.id" ng-disabled="!alerta.orden_selected" ng-model="alerta.tarea_selected" select-tareas ng-options="option.nombre for option in availableOptions track by option.id">
+                                    <option ng-if="_loading_data">Cargando...</option>
+                                    <option value="" ng-show="!_loading_data">Seleccione</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="field-1" class="control-label">Descripción</label>
+                                <textarea name="descripcion" required="required" ng-model="alerta.descripcion" class="form-control"></textarea>
+                                <p class="text-muted font-13 m-b-30">
+                                    Documente este evento o alerta.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect btn-sm" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light btn-sm submit-btn">Aceptar</button>
+                </div>
+                <input type="hidden" name="id" ng-value="alerta.id" />
+            </form>
+        </div>
+    </div>
+</div>

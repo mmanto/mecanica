@@ -1,0 +1,32 @@
+<div id="modal-tarea-comentarios[[tarea.id]]" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="display: block;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" style="font-weight: 700;">Cadena de comentarios</h4>
+                <div class="text-muted font-13 m-b-0">Órden # [[tarea.id]]</div>
+            </div>
+            <div class="modal-body" style="max-height: 400px; overflow-y:auto;">
+                <p class="comment-new-header">Ingresa un comentario</p>
+                <div ng-if="tarea.estado.codigo!=2 && tarea.estado.codigo!=5">
+                    <textarea class="form-control" ng-model="tarea.new_comment.texto" rows="4"></textarea>
+                    <button type="button" class="btn btn-sm btn-primary pull-right m-t-10" ng-disabled="tarea._replaying" ng-class="{disabled:tarea._replaying}" ng-click="addCommentTarea(tarea)">Enviar comentario</button>
+                </div>
+                <div class="clearfix"></div>
+                <div class="m-t-20" ng-repeat="comment in tarea.comentarios | orderBy:'-fecha'" class="reply-wrapper" ng-show="!tarea.toggled_replies || $index<2">
+                    <h5 ng-if="!comment.usuario || comment.usuario.id==$root.LOGGED_USER.id">
+                        <b>Tú</b>
+                        <span class="comment_date">a las [[comment.fecha|date:"medium"]]</span></h5>
+                    <h5 ng-if="comment.usuario && comment.usuario.id!=$root.LOGGED_USER.id">
+                        <b>[[comment.usuario.perfil.nombre]]</b>
+                        <span class="comment_date">a las [[comment.fecha|date:"medium"]]</span>
+                    </h5>
+                    <p class="comment_answer" ng-bind="comment.texto"></p>
+                </div>
+                <div class="toggled-replies-responses" ng-show="tarea.comentarios.length>3 && tarea.toggled_replies" ng-click="tarea.toggled_replies=false">
+                    Mostrar todos los comentarios
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

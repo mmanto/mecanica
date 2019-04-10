@@ -1,0 +1,31 @@
+<div id="modal-alerta-comentarios[[alerta.id]]" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="display: block;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" style="font-weight: 700;">Cadena de comentarios</h4>
+                <div class="text-muted font-13 m-b-0">Órden # [[alerta.id]]</div>
+            </div>
+            <div class="modal-body" style="max-height: 400px; overflow-y:auto;">
+                <p class="comment-new-header">Ingresa un comentario</p>
+
+                <textarea class="form-control" ng-model="alerta.new_comment.texto" rows="4"></textarea>
+                <button type="button" class="btn btn-sm btn-primary pull-right m-t-10" ng-disabled="alerta._replaying" ng-class="{disabled:alerta._replaying}" ng-click="addCommentAlerta(alerta)">Enviar comentario</button>
+                <div class="clearfix"></div>
+                <div class="m-t-20" ng-repeat="comment in alerta.comentarios | orderBy:'-fecha'" class="reply-wrapper" ng-show="!alerta.toggled_replies || $index<2">
+                    <h5 ng-if="!comment.usuario || comment.usuario.id==$root.LOGGED_USER.id">
+                        <b>Tú</b>
+                        <span class="comment_date">a las [[comment.fecha|date:"medium"]]</span></h5>
+                    <h5 ng-if="comment.usuario && comment.usuario.id!=$root.LOGGED_USER.id">
+                        <b>[[comment.usuario.perfil.nombre]]</b>
+                        <span class="comment_date">a las [[comment.fecha|date:"medium"]]</span>
+                    </h5>
+                    <p class="comment_answer" ng-bind="comment.texto"></p>
+                </div>
+                <div class="toggled-replies-responses" ng-show="alerta.comentarios.length>3 && alerta.toggled_replies" ng-click="alerta.toggled_replies=false">
+                    Mostrar todos los comentarios
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es_LA" {% block app_name %}{% endblock%} {% block ng_attrs %}{% endblock%}>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="description" content="{% block description %} {% endblock%}" />
+        <meta name="author" content="Bitmicry">
+
+        <title ng-if="!page_title">Metal Mecánica {% block title %} Inicio {% endblock %}</title>
+        <title ng-if="page_title && page_title!='undefined'" ng-bind="page_title"></title>
+        {% block metas %}{% endblock %}
+        {% load staticfiles %}
+        <!-- <link rel="icon" type="image/x-icon" href="{% block favicon %}{% static 'mecanica/images/logo_icon_small.png' %}{% endblock %}" /> -->
+
+        {% block stylesheets %}
+            <link href="{% static 'mecanica/plugins/switchery/switchery.min.css" rel="stylesheet' %}" />
+            <link href="{% static 'mecanica/plugins/jquery-circliful/css/jquery.circliful.css' %}" rel="stylesheet" type="text/css" />
+
+            <link href="{% static 'mecanica/assets/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+            <link href="{% static 'mecanica/assets/css/icons.css' %}" rel="stylesheet" type="text/css">
+            <link href="{% static 'mecanica/assets/css/style.css' %}" rel="stylesheet" type="text/css">
+        {% endblock %}
+        {% block default_js %}
+           <script src="{% static 'mecanica/assets/js/modernizr.min.js' %}" type="text/javascript"></script>
+        {% endblock %}
+
+    </head>
+    <body class="fixed-left" {% block ng_ctr %}{% endblock%}>
+        {# solo para mensajes de informaciones fijas que iran por encima de toda la pagina, ej: No ha activado la cuenta.. etc #}
+        {% block top_message %} {% endblock %}
+
+        <div id="{% block body_id %}main-body{% endblock %}">
+            {% block body %} {% endblock %}
+        </div>
+
+        {% block javascripts %}
+            <script>
+                var resizefunc = [];
+            </script>
+
+            <!-- Plugins  -->
+            <script src="{% static 'mecanica/assets/js/jquery.min.js' %}"></script>
+            <script src="{% static 'mecanica/assets/js/jquery.form.js' %}"></script>
+            <script src="{% static 'mecanica/assets/js/popper.min.js' %}"></script><!-- Popper for Bootstrap -->
+            <script src="{% static 'mecanica/assets/js/bootstrap.min.js' %}"></script>
+            <script src="{% static 'mecanica/assets/js/detect.js' %}"></script>
+            <script src="{% static 'mecanica/assets/js/fastclick.js' %}"></script>
+            <script src="{% static 'mecanica/assets/js/jquery.slimscroll.js' %}"></script>
+            <script src="{% static 'mecanica/assets/js/jquery.blockUI.js' %}"></script>
+            <script src="{% static 'mecanica/assets/js/waves.js' %}"></script>
+            <script src="{% static 'mecanica/assets/js/wow.min.js' %}"></script>
+            <script src="{% static 'mecanica/assets/js/jquery.nicescroll.js' %}"></script>
+            <script src="{% static 'mecanica/assets/js/jquery.scrollTo.min.js' %}"></script>
+            <script src="{% static 'mecanica/plugins/switchery/switchery.min.js' %}"></script>
+
+            <!-- Counter Up  -->
+            <script src="{% static 'mecanica/plugins/waypoints/lib/jquery.waypoints.min.js' %}"></script>
+            <script src="{% static 'mecanica/plugins/counterup/jquery.counterup.min.js' %}"></script>
+
+            <!-- circliful Chart -->
+            <script src="{% static 'mecanica/plugins/jquery-circliful/js/jquery.circliful.min.js' %}"></script>
+            <script src="{% static 'mecanica/plugins/jquery-sparkline/jquery.sparkline.min.js' %}"></script>
+
+            <!-- skycons -->
+            <script src="{% static 'mecanica/plugins/skyicons/skycons.min.js' %}" type="text/javascript"></script>
+
+            <!-- Page js  -->
+            <script src="{% static 'mecanica/assets/pages/jquery.dashboard.js' %}"></script>
+
+            <!-- Custom main Js -->
+            <script src="{% static 'mecanica/assets/js/jquery.core.js' %}"></script>
+            <script src="{% static 'mecanica/assets/js/jquery.app.js' %}"></script>
+
+
+            <script type="text/javascript">
+                jQuery(document).ready(function($) {
+                    $('.counter').counterUp({
+                        delay: 100,
+                        time: 1200
+                    });
+                    $('.circliful-chart').circliful();
+                });
+
+                // BEGIN SVG WEATHER ICON
+                if (typeof Skycons !== 'undefined'){
+                    var icons = new Skycons(
+                            {"color": "#7266ba"},
+                            {"resizeClear": true}
+                            ),
+                            list  = [
+                                "clear-day", "clear-night", "partly-cloudy-day",
+                                "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+                                "fog"
+                            ],
+                            i;
+
+                    for(i = list.length; i--; )
+                        icons.set(list[i], list[i]);
+                    icons.play();
+                };
+
+            </script>
+        {% endblock %}
+        {% block custom_javascripts %}{% endblock %}
+        {% block tickets_javascripts %}{% endblock %}
+    </body>
+
+</html>

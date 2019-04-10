@@ -1,0 +1,36 @@
+<div id="modal-form-layout[[layout.id]]" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="display: block;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" ng-if="!layout.id" style="font-weight: 700;">Nuevo Layout</h4>
+                <h4 class="modal-title" ng-if="layout.id" style="font-weight: 700;">Editar Layout</h4>
+            </div>
+            <form ajax-form callback="layoutCreated" method="POST" action="/app/api/layout/">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="field-1" class="control-label">Nombre</label>
+                                <input type="text" name="nombre" required="required" ng-model="layout.nombre" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="field-1" class="control-label">Breve descripción</label>
+                                <textarea name="descripcion" ng-model="layout.descripcion" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect btn-sm" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light btn-sm submit-btn">Aceptar</button>
+                </div>
+                <input type="hidden" name="id" ng-value="layout.id" />
+            </form>
+        </div>
+    </div>
+</div>

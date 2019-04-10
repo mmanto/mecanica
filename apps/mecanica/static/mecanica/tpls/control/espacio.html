@@ -1,0 +1,162 @@
+<div id="main-wraper">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Espacio personalizado de trabajo</h4>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card-box">
+                <ul class="nav nav-tabs tabs-bordered">
+                    <li class="nav-item">
+                        <a href="" data-target="#mis-proyectos" class="nav-link active" data-toggle="tab" aria-expanded="false">
+                            Mis Proyectos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" data-target="#mis-actividades" class="nav-link" data-toggle="tab" aria-expanded="false">
+                            Todas mis actividades
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="mis-proyectos">
+                        <div class="row">
+                            <div ng-if="!proyecto.archivado" ng-repeat="proyecto in proyectos.results | filter:filter_search as proyResult" ng-show="!proyecto.deleting" class="col-lg-4 col-md-4 col-sm-6 card-block-wrapper card-block-wrapper-proyecto sortable-card">
+                                <div class="card block">
+                                    <div class="card-block">
+                                        <div class="row card-header">
+                                            <div class="col-11">
+                                                <div style="background:#[[proyecto.estado.color]]" class="truncate text-muted font-13 m-b-0 proyecto-estado-selected">[[proyecto.estado.nombre]]</div>
+                                            </div>
+                                            <div class="options-btn" dropdown-append-to-body ng-if="$root.LOGGED_USER.id==proyecto.usuario.id || $root.LOGGED_USER.id==proyecto.responsable.id">
+                                                <a href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fa fa-cog"></i>
+                                                </a>
+                                                <ul estados-proyecto ng-model="proyecto.estado" class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                                    <li role="presentation" class="dropdown-header" ng-if="_loading_data">Cargando estados...</li>
+                                                    <li ng-repeat="estado in availableOptions" class="estados-sample-li">
+                                                        <a style="font-size:13px !important;" href="javascript:;" ng-click="changeEstadoProy(proyecto, estado)"><span style="background:#[[estado.color]];" class="proyecto-estado-sample">&nbsp;&nbsp;</span> [[estado.nombre]]</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12"><h4 class="m-t-0 header-title"><b>[[proyecto.nombre]]</b></h4></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">Responsable: [[proyecto.responsable.perfil.nombre]]</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-12 col-sm-12">Inicio: [[proyecto.fecha_inicio | date:'mediumDate' ]]</div>
+                                                <div class="col-lg-6 col-md-12 col-sm-12">Fin: [[proyecto.fecha_fin | date:'mediumDate' ]]</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">Cliente: [[proyecto.cliente.perfil.nombre]]</div>
+                                            </div>
+                                            <!-- <hr/>
+                                            <div class="row" ng-if="!proyecto.ordenes.length">
+                                                <p class="col-12 text-muted font-13 m-b-0">No se han agregado órdenes de trabajo</p>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <paginator ng-if="proyectos.results.length" route="/app/api/proyecto" ng-model="proyectos"></paginator>
+                            </div>
+                        </div>
+                        <div ng-show="!proyResult.length" class="alert alert-default m-t-20">
+                            <h5 class="text-uppercase font-bold m-b-0">No se encontraron resultados</h5>
+                            <p class="font-13 m-t-10">No existen proyectos relacionados con usted por el momento.</p>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane" id="mis-actividades">
+                        <div class="row">
+                            <div ng-if="!tarea.archivado" ng-repeat="tarea in tareas.results | filter:filter_search as tareaResult" ng-show="!tarea.deleting" class="col-lg-4 col-md-4 col-sm-6 card-block-wrapper card-block-wrapper-proyecto sortable-card">
+                                <div class="card block no-footer">
+                                    <div class="card-block">
+                                        <div class="row card-header" style="background:#[[tarea.estado.color]]">
+                                            <div class="col-lg-11 col-md-10 col-sm-10 col-xs-10">
+                                                <div class="truncate text-muted font-13 m-b-0 proyecto-estado-selected">[[tarea.estado.nombre]]</div>
+                                            </div>
+                                            <div class="btn-top-right">
+                                                <span class="btn-states" ng-if="tarea.archivos.length">
+                                                    <a style="margin-right:2px;" tooltip="Documentos adjuntos" data-placement="top" href="" data-toggle="modal" data-target="#modal-tarea-attachment[[tarea.id]]">
+                                                        <i class="mdi mdi-attachment"></i>
+                                                    </a>
+                                                </span>
+                                                <div class="btn-states" style="display:inline-block;" dropdown-append-to-body ng-if="$root.LOGGED_USER.id==tarea.usuario.id || $root.LOGGED_USER.id==tarea.responsable.id">
+                                                    <a tooltip="Cambiar estado" data-placement="top" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fa fa-cog"></i>
+                                                    </a>
+                                                    <ul estados-orden ng-model="tarea.estado" class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                                        <li role="presentation" class="dropdown-header" ng-if="_loading_data">Cargando estados...</li>
+                                                        <li ng-repeat="estado in availableOptions" class="estados-sample-li">
+                                                            <a style="font-size:13px !important;" href="javascript:;" ng-click="changeEstadoTarea(tarea, estado)"><span style="background:#[[estado.color]];" class="proyecto-estado-sample">&nbsp;&nbsp;</span> [[estado.nombre]]</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h4 class="m-t-0 header-title"><b># [[tarea.id]]</b></h4>
+                                                    <span class="comment_date order-date">[[tarea.fecha|date:"mediumDate"]]</span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">Responsable: [[tarea.responsable.perfil.nombre]]</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12" ng-bind="tarea.descripcion|truncate:100"></div>
+                                            </div>
+                                            <hr/>
+                                            <div ng-repeat="comment in tarea.comentarios | orderBy:'-fecha'" class="reply-wrapper" ng-show="!tarea.toggled_replies || $index<2">
+                                                <h5 ng-if="!comment.usuario || comment.usuario.id==$root.LOGGED_USER.id">
+                                                    <b>Tú</b>
+                                                    <span class="comment_date">a las [[comment.fecha|date:"medium"]]</span></h5>
+                                                <h5 ng-if="comment.usuario && comment.usuario.id!=$root.LOGGED_USER.id">
+                                                    <b>[[comment.usuario.perfil.nombre]]</b>
+                                                    <span class="comment_date">a las [[comment.fecha|date:"medium"]]</span>
+                                                </h5>
+                                                <p class="comment_answer" ng-bind="comment.texto"></p>
+                                            </div>
+                                            <div class="toggled-replies-responses" ng-show="tarea.comentarios.length>3 && tarea.toggled_replies" ng-click="tarea.toggled_replies=false">
+                                                Mostrar todos los comentarios
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <ng-include src="'/static/mecanica/tpls/documentos/modals/attachments_tarea.html'"></ng-include>
+                            </div>
+                        </div>
+                        <div ng-show="!tareaResult.length" class="alert alert-default">
+                            <h5 class="text-uppercase font-bold m-b-0">No se encontraron resultados</h5>
+                            <p class="font-13 m-t-10">No existen tareas o actividades asignadas a usted hasta este momento.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-include src="'/static/mecanica/tpls/control/modals/form_folder.html'"></ng-include>
+<div class="uploading-box" ng-if="uploading_list.length">
+    <h5 class="m-t-10 m-b-0 header-title text-center">Subiendo archivos...</h5>
+    <div class="uploading-file truncate" ng-repeat="upload in uploading_list">
+        <i class="mdi mdi-upload"></i>
+        <span class="uploading-data">[ [[upload.percent]] % ] [[upload.el.name]]</span>
+    </div>
+</div>

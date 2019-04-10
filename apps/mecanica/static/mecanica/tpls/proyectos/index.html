@@ -1,0 +1,112 @@
+<div id="main-wraper">
+    <div class=" page-title-box">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="">
+                    <h4 class="m-t-0 content-title"><b>Planificación y gestión de proyectos</b></h4>
+                    <p class="text-muted font-13 m-b-0">
+                        Listado de todos los proyectos
+                    </p>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <input type="search" class="form-control form-control-sm" placeholder="Buscar proyecto..." aria-controls="datatable-buttons" ng-model="filter_search">
+            </div>
+        </div>
+    </div>
+    <!-- <div class="row" dragular='{"containersModel":proyectos.results,"nameSpace":"proyectos", scope: $parent}'> -->
+
+    <div class="row" html-sortable="sections_sortable_option" ng-model="proyectos.results">
+        <div ng-if="!proyecto.archivado" ng-repeat="proyecto in proyectos.results | filter:filter_search as proyResult" ng-show="!proyecto.deleting" class="col-lg-4 col-md-4 col-sm-6 card-block-wrapper card-block-wrapper-proyecto sortable-card">
+            <div class="card block">
+                <div class="card-block">
+                    <div class="row card-header">
+                        <div class="col-11">
+                            <div style="background:#[[proyecto.estado.color]]" class="truncate text-muted font-13 m-b-0 proyecto-estado-selected">[[proyecto.estado.nombre]]</div>
+                        </div>
+                        <div class="options-btn" dropdown-append-to-body ng-if="$root.LOGGED_USER.id==proyecto.usuario.id || $root.LOGGED_USER.id==proyecto.responsable.id">
+                            <a href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-cog"></i>
+                            </a>
+                            <ul estados-proyecto ng-model="proyecto.estado" class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                <li role="presentation" class="dropdown-header" ng-if="_loading_data">Cargando estados...</li>
+                                <li ng-repeat="estado in availableOptions" class="estados-sample-li">
+                                    <a style="font-size:13px !important;" href="javascript:;" ng-click="changeEstadoProy(proyecto, estado)"><span style="background:#[[estado.color]];" class="proyecto-estado-sample">&nbsp;&nbsp;</span> [[estado.nombre]]</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12"><h4 class="m-t-0 header-title"><b>[[proyecto.nombre]]</b></h4></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">Responsable: [[proyecto.responsable.perfil.nombre]]</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 col-sm-12">Inicio: [[proyecto.fecha_inicio | date:'mediumDate' ]]</div>
+                            <div class="col-lg-6 col-md-12 col-sm-12">Fin: [[proyecto.fecha_fin | date:'mediumDate' ]]</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">Cliente: [[proyecto.cliente.perfil.nombre]]</div>
+                        </div>
+                        <hr/>
+                        <div class="row" ng-if="proyecto.ordenes.length">
+                            <p class="col-12 text-muted font-13 m-b-0">Órdenes de trabajo</p>
+                            <div class="col-md-12">
+                                <table class="table table-condensed">
+                                    <tr ng-repeat="orden in proyecto.ordenes | orderBy:'orden'">
+                                        <td>
+                                            <a href="" data-toggle="modal" data-target="#modal-form-orden[[orden.id]]"># [[orden.id]]</a>
+                                        </td>
+                                        <td>
+                                            <i class="mdi mdi-account"></i> [[orden.responsable.perfil.nombre]]
+                                        </td>
+                                        <td style="width:20px;">
+                                            <i data-toggle="modal" data-target="#modal-orden-comentarios[[orden.id]]" class="mdi mdi-comment-multiple-outline btn btn-sm" tooltip="Cadena de comentarios" data-placement="top"></i>
+                                            <ng-include src="'/static/mecanica/tpls/proyectos/modals/comentarios.html'"></ng-include>
+                                            <ng-include src="'/static/mecanica/tpls/proyectos/modals/form_orden.html'"></ng-include>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="!proyecto.ordenes.length">
+                            <p class="col-12 text-muted font-13 m-b-0">No se han agregado órdenes de trabajo</p>
+                        </div>
+                    </div>
+                    <div class="card-title card-title-fixed">
+                        <div class="card-fixed-btns">
+                            <a class="btn btn-sm btn-customs" href="" data-toggle="modal" data-target="#modal-form-proyecto[[proyecto.id]]" tooltip="Editar" data-placement="top"><i class="fa fa-edit"></i></a>
+                            <a class="btn btn-sm btn-customs" href="" data-toggle="modal" data-target="#modal-form-orden" tooltip="Agregar órden" data-placement="top"><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-sm btn-customs" data-toggle="modal" data-target="#modal-delete-proyecto[[proyecto.id]]" tooltip="Eliminar Proyecto" data-placement="top"><i class="fa fa-trash-o"></i></a>
+                            <a class="btn btn-sm btn-customs" ng-click="archivar(proyecto)" tooltip="Archivar" data-placement="top"><i class="mdi mdi-archive"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-include src="'/static/mecanica/tpls/proyectos/modals/delete.html'"></ng-include>
+            <ng-include src="'/static/mecanica/tpls/proyectos/modals/form.html'"></ng-include>
+            <ng-include src="'/static/mecanica/tpls/proyectos/modals/form_orden.html'"></ng-include>
+
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 card-block-wrapper card-block-wrapper-proyecto">
+            <a href="" data-toggle="modal" data-target="#modal-form-proyecto">
+            <div class="card block new">
+                <div class="card-img">
+                    <i class="fa fa-plus"></i>
+                </div>
+                <div class="card-block"></div>
+            </div>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <paginator ng-if="proyectos.results.length" route="/app/api/proyecto" ng-model="proyectos"></paginator>
+        </div>
+    </div>
+</div>
+<ng-include src="'/static/mecanica/tpls/proyectos/modals/form.html'"></ng-include>

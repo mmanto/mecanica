@@ -1,0 +1,39 @@
+<nav ng-if="data.pageCount > 1">
+    <ul class="pagination">
+
+            <li class="page-item" ng-if="data.previous">
+                <a class="page-link" rel="prev" href="" ng-click="previous_page()">&laquo;</a>
+            </li>
+            <li class="page-item disabled" ng-if="!data.previous">
+                <span class="page-link">&laquo;</span>
+            </li>
+
+
+            <li class="page-item" ng-if="data.startPage > 1">
+                <a class="page-link" href="" ng-click="goto_page(1)">1</a>
+            </li>
+            <li class="page-item disabled" ng-if="data.startPage > 1 && data.startPage != 2">
+                <span class="page-link">&hellip;</span>
+            </li>
+
+            <li class="page-item" ng-repeat="page in data.pagesInRange" ng-class="{active:page==data.current}">
+                <a ng-if="page!=data.current" class="page-link" href="" ng-click="goto_page(page)" ng-bind="page"></a>
+                <span ng-if="page==data.current" class="page-link" ng-bind="page"></span>
+            </li>
+
+            <li class="page-item disabled" ng-if="data.pageCount > data.endPage && data.pageCount > (data.endPage + 2)">
+                <span class="page-link">&hellip;</span>
+            </li>
+
+            <li class="page-item" ng-if="data.pageCount > data.endPage">
+                <a class="page-link" href="" ng-click="goto_page(data.pageCount)" ng-bind="data.pageCount"></a>
+            </li>
+
+        <li class="page-item" ng-if="data.next">
+            <a class="page-link" rel="next" href="" ng-click="next_page()">&raquo;</a>
+        </li>
+        <li  class="page-item disabled" ng-if="!data.next">
+            <span class="page-link">&raquo;</span>
+        </li>
+    </ul>
+</nav>

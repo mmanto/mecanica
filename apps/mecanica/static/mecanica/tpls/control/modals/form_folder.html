@@ -1,0 +1,33 @@
+<div id="modal-form-folder[[folder.id]]" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="display: block;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" ng-if="!folder.id" style="font-weight: 700;">Nueva carpeta</h4>
+                <h4 class="modal-title" ng-if="folder.id" style="font-weight: 700;">Renombrar carpeta</h4>
+            </div>
+            <form ajax-form callback="folderCreated" method="POST" action="/app/api/docs/">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="field-1" class="control-label">Nombre</label>
+                                <input type="text" name="nombre" required="required" ng-model="folder.nombre" class="form-control" />
+                                <p class="text-muted font-13 m-b-30">
+                                    Introduzca el nombre de la carpeta
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect btn-sm" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light btn-sm submit-btn">Aceptar</button>
+                </div>
+                <input type="hidden" name="folder" ng-value="getOpenedFolder()" />
+                <input type="hidden" name="id" ng-value="folder.id" />
+            </form>
+        </div>
+    </div>
+</div>

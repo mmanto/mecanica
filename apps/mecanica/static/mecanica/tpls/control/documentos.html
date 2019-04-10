@@ -1,0 +1,130 @@
+<div id="main-wraper">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Repositorio de documentos</h4>
+                <div class="clearfix"></div>
+                <p class="text-muted font-13 m-b-10">
+                    Gestione los documentos, instrucciones de trabajo y material de capacitación aquí
+                </p>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card-box">
+                <div class="row m-b-20">
+                    <div class="col-md-8">
+                        <a href="javascript:;" ng-if="folder_routes.length" ng-click="gotoFolder()">Repositorio</a>
+                        <span ng-if="!folder_routes.length">Repositorio</span>
+                        <span ng-repeat="folder in folder_routes">/
+                            <a href="javascript:;" ng-bind="folder.nombre" ng-if="!$last" ng-click="gotoFolder(folder)"></a>
+                            <span ng-bind="folder.nombre" ng-if="$last"></span>
+                        </span>
+                    </div>
+                    <div class="col-md-4" style="text-align: right; padding-right: 10px;">
+                        <button class="btn btn-primary waves-effect waves-light btn-sm" type="button" data-toggle="modal" data-target="#modal-form-folder"><i class="mdi mdi-folder-plus"></i> Nueva</button>
+
+                        <span class="fileinput-button btn btn-sm btn-primary">
+                          <i class="mdi mdi-upload"></i> Archivos
+                          <input type="file" multiple onchange="angular.element(this).scope().getFileDetails(angular.element(this).scope().documentos,this)">
+                        </span>
+                    </div>
+                </div>
+
+                <div class="tables_wrapper m-b-10">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="tables_left" id="datatable-buttons_length" ng-init="order_by='nombre'">
+                                <label>Ordenar por
+                                    <select name="datatable-buttons_length" class="form-control form-control-sm" ng-model="order_by">
+                                        <option value="nombre">Nombre</option>
+                                        <option value="fecha_modificacion">Fecha</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div id="datatable-buttons_filter" class="tables_filter">
+                                <label style="text-align:right;">Buscar:
+                                    <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="datatable-buttons" ng-model="filter_search">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="docsResult.length">
+                    <div class="row">
+                        <div class="col-md-9"><b>Nombre</b></div>
+                        <div class="col-md-2"><b>Modificación</b></div>
+                        <div class="col-md-1">&nbsp;</div>
+                    </div>
+                    <div class="row row-file" ng-repeat="archivo in documentos | filter:filter_search | orderBy:['tipo!=\'folder\'', order_by] as docsResult">
+                        <div class="col-md-9">
+                            <i class="mdi mdi-folder file-icon" ng-if="archivo.tipo=='folder'"></i>
+                            <i class="mdi mdi-file-excel file-icon" ng-if="isExcel(archivo)"></i>
+                            <i class="mdi mdi-file-xml file-icon" ng-if="isHtml(archivo)"></i>
+                            <i class="mdi mdi-file-word-box file-icon" ng-if="isWord(archivo)"></i>
+                            <i class="mdi mdi-file-image file-icon" ng-if="isImage(archivo)"></i>
+                            <i class="mdi mdi-file-pdf file-icon" ng-if="isPdf(archivo)"></i>
+                            <i class="mdi mdi-file-document file-icon" ng-if="isText(archivo)"></i>
+                            <i class="mdi mdi-file-music file-icon" ng-if="isAudio(archivo)"></i>
+                            <i class="mdi mdi-file-powerpoint file-icon" ng-if="isPpt(archivo)"></i>
+                            <i class="mdi mdi-file-video file-icon" ng-if="isVideo(archivo)"></i>
+                            <i class="mdi mdi-archive file-icon" ng-if="isZip(archivo)"></i>
+                            <i class="mdi mdi-file file-icon" ng-if="isFile(archivo)"></i>
+
+                            <a href="javascript:;" ng-click="openFolder(archivo)" ng-if="archivo.tipo=='folder'" ng-bind="archivo.nombre"></a>
+                            <a href="" ng-if="archivo.tipo!='folder'" ng-bind="archivo.nombre"></a>
+                        </div>
+                        <div class="col-md-2">
+                            [[archivo.fecha_modificacion|date:'mediumDate']]
+                        </div>
+                        <div class="col-md-1">
+                            <span class="pull-right">
+                                <a href="javascript:;" class="button-menu" data-toggle="dropdown">
+                                    <i class="mdi mdi-dots-vertical"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-custom dropdown-menu-right" style="background-color: #fff;">
+                                    <li>
+                                        <a href="" data-toggle="modal" data-target="#modal-archivo-info[[archivo.id]]">
+                                            <i class="mdi mdi-information-variant"></i> Información
+                                        </a>
+                                    </li>
+                                    <li ng-if="archivo.tipo!='folder'">
+                                        <a target="_blank" ng-href="/app/api/docs/[[archivo.id]]/download">
+                                            <i class="mdi mdi-download"></i> Descargar
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="" data-toggle="modal" data-target="#modal-del-archivo[[archivo.id]]">
+                                            <i class="fa fa-trash"></i> Eliminar
+                                        </a>
+                                    </li>
+                                </ul>
+                            </span>
+                            <ng-include src="'/static/mecanica/tpls/control/modals/delete_archivo.html'"></ng-include>
+                            <ng-include src="'/static/mecanica/tpls/control/modals/form_archivo.html'"></ng-include>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-show="!docsResult.length" class="alert alert-default">
+                    <h5 class="text-uppercase font-bold m-b-0">No se encontraron resultados</h5>
+                    <p class="font-13 m-t-10">Gestione los documentos de este espacio usando los botones de agregar carpeta o ficheros.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-include src="'/static/mecanica/tpls/control/modals/form_folder.html'"></ng-include>
+<div class="uploading-box" ng-if="uploading_list.length">
+    <h5 class="m-t-10 m-b-0 header-title text-center">Subiendo archivos...</h5>
+    <div class="uploading-file truncate" ng-repeat="upload in uploading_list">
+        <i class="mdi mdi-upload"></i>
+        <span class="uploading-data">[ [[upload.percent]] % ] [[upload.el.name]]</span>
+    </div>
+</div>

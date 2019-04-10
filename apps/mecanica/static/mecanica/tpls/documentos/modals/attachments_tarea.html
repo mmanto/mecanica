@@ -1,0 +1,60 @@
+<div class="modal fade" id="modal-tarea-attachment[[tarea.id]]" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-smd">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                Documentos de la tarea
+            </div>
+            <div class="modal-body">
+                <div class="modal-body-content">
+                    <p class="text-muted font-13 m-b-20">
+                        Documentos, instrucciones de trabajo y materiales de capacitación que se consideran importantes para el desarrollo de esta tarea.
+                    </p>
+
+                    <div ng-show="docsResult.length">
+                        <div class="row">
+                            <div class="col-md-8">Nombre</div>
+                            <div class="col-md-3">Modificado</div>
+                            <div class="col-md-1">&nbsp;</div>
+                        </div>
+                        <div class="docs-wrapper">
+                            <div class="row row-file" ng-repeat="archivo in tarea.archivos | filter:filter_search | orderBy:['tipo!=\'folder\'', order_by] as docsResult">
+                                <div class="col-md-8 truncate">
+                                    <i class="mdi mdi-folder file-icon" ng-if="archivo.tipo=='folder'"></i>
+                                    <i class="mdi mdi-file-excel file-icon" ng-if="isExcel(archivo)"></i>
+                                    <i class="mdi mdi-file-xml file-icon" ng-if="isHtml(archivo)"></i>
+                                    <i class="mdi mdi-file-word-box file-icon" ng-if="isWord(archivo)"></i>
+                                    <i class="mdi mdi-file-image file-icon" ng-if="isImage(archivo)"></i>
+                                    <i class="mdi mdi-file-pdf file-icon" ng-if="isPdf(archivo)"></i>
+                                    <i class="mdi mdi-file-document file-icon" ng-if="isText(archivo)"></i>
+                                    <i class="mdi mdi-file-music file-icon" ng-if="isAudio(archivo)"></i>
+                                    <i class="mdi mdi-file-powerpoint file-icon" ng-if="isPpt(archivo)"></i>
+                                    <i class="mdi mdi-file-video file-icon" ng-if="isVideo(archivo)"></i>
+                                    <i class="mdi mdi-archive file-icon" ng-if="isZip(archivo)"></i>
+                                    <i class="mdi mdi-file file-icon" ng-if="isFile(archivo)"></i>
+
+                                    <a target="_blank" ng-href="/app/api/docs/[[archivo.id]]/download" ng-bind="archivo.nombre"></a>
+
+                                </a>
+                                </div>
+                                <div class="col-md-3" style="padding-right:0">
+                                    [[archivo.fecha_modificacion|date:'mediumDate']]
+                                </div>
+                                <div class="col-md-1" style="padding-left:0">
+                                    <a target="_blank" ng-href="/app/api/docs/[[archivo.id]]/download">
+                                        <i class="mdi mdi-download"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-show="!docsResult.length" class="alert alert-default">
+                        <h5 class="text-uppercase font-bold m-b-0">No se encontraron resultados</h5>
+                        <p class="font-13 m-t-10">La tarea no tiene documentos relacionados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

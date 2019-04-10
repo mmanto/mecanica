@@ -1,0 +1,91 @@
+{% extends "base_app.html"%}
+{% block title %} Registro de Cuentas de Usuarios {% endblock %}
+{% block body %}
+
+    <div style="margin:0 auto; width: 600px;">
+        <div class="text-center">
+            <span class="logo-lg">Registro de Cuentas de Usuarios</span>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="page-header" style="text-align: center"><h2>Registro de usuarios</h2></div>
+                <div id="login-container" style="margin: 0 auto; max-width: 800px; margin-bottom: 150px; " class="gradient">
+
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <form method="post" action="">
+                                {% csrf_token %}
+                                <div class="form-group row">
+                                    <div class="col-md-3 col-lg-3">
+                                        <label>Nombre:</label>
+                                    </div>
+                                    <div class="col-md-8 col-lg-8">
+                                        {{ form.first_name }}
+                                        {{ form.first_name.errors }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3 col-lg-3">
+                                        <label>Apellido:</label>
+                                    </div>
+                                    <div class="col-md-8 col-lg-8">
+                                        {{ form.last_name }}
+                                        {{ form.last_name.errors }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3 col-lg-3">
+                                        <label>Usuario:</label>
+                                    </div>
+                                    <div class="col-md-8 col-lg-8">
+                                        {{ form.username }}
+                                        {{ form.username.errors }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3 col-lg-3">
+                                        <label>Correo:</label>
+                                    </div>
+                                    <div class="col-md-8 col-lg-8">
+                                        {{ form.email }}
+                                        {{ form.email.errors }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3 col-lg-3">
+                                        <label>Compañía:</label>
+                                    </div>
+                                    <div class="col-md-8 col-lg-8">
+                                        {{ form.company }}
+                                        {{ form.company.errors }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3 col-lg-3">
+                                        <label>Contraseña:</label>
+                                    </div>
+                                    <div class="col-md-8 col-lg-8">
+                                        {{ form.password1 }}
+                                        {{ form.password1.errors }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3 col-lg-3">
+                                        <label>Repetir Contraseña:</label>
+                                    </div>
+                                    <div class="col-md-8 col-lg-8">
+                                        {{ form.password2 }}
+                                        {{ form.password2.errors }}
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary">Registrar usuario</button>
+                            </form>
+                        </div>
+                        <div class="col-lg-3 col-md-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
