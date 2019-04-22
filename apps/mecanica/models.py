@@ -37,7 +37,7 @@ class Perfil(models.Model):
 	creado_por = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="perfiles", null=True)
 
 	def __str__(self):
-		return self.usuario
+		return str(self.usuario)
 
 class Archivo(models.Model):
     ruta = models.FileField(upload_to=documento_file, null=True)
